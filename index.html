@@ -33,6 +33,9 @@ h2{font-size:1.6rem;font-weight:900;color:var(--deep);margin-bottom:12px}
 section.panel{background:rgba(255,253,248,.75);border-radius:24px;padding:24px;margin:0 0 20px}
 section.panel p{color:var(--muted);font-weight:600}
 section.panel p+p{margin-top:10px}
+h2 .badge{display:inline-block;background:var(--sand);color:var(--deep);border-radius:999px;padding:2px 12px;font-size:.95rem;font-weight:800;vertical-align:middle;margin-right:6px}
+.section-head{padding:30px 0 6px}
+.group h2{margin-top:10px}
 footer{padding:26px 0 40px;text-align:center;color:#4f6f6a;font-size:.9rem;font-weight:600}
 footer p+p{margin-top:6px}
 @media (max-width:520px){nav ul{gap:12px}.card{padding:20px}}
@@ -42,7 +45,7 @@ footer p+p{margin-top:6px}
 <div class="wrap">
   <nav>
     <a class="brand" href="#">🌿 Nolan's Picks</a>
-    <ul><li><a href="#picks">Picks</a></li><li><a href="#about">About</a></li><li><a href="#privacy">Privacy</a></li></ul>
+    <ul><li><a href="#picks">Picks</a></li><li><a href="#gifts">Gift Ideas</a></li><li><a href="#about">About</a></li><li><a href="#privacy">Privacy</a></li></ul>
   </nav>
 
   <!-- Required Amazon Associates disclosure (top) -->
@@ -58,6 +61,15 @@ footer p+p{margin-top:6px}
     <section id="picks" aria-label="Emergency kit picks">
       <div class="grid" id="product-grid"><!-- cards are rendered from the PRODUCTS list below --></div>
       <noscript><p>Please enable JavaScript to see the product list.</p></noscript>
+    </section>
+
+    <section id="gifts" aria-label="Christmas gift ideas">
+      <div class="section-head">
+        <div class="eyebrow">Holiday 2026</div>
+        <h2>🎄 Christmas Gift Ideas</h2>
+        <p class="sub">Fun, hands-on gifts for curious kids, grouped by age.</p>
+      </div>
+      <div id="gift-groups"><!-- groups are rendered from the GIFTS list below --></div>
     </section>
 
     <section class="panel" id="about">
@@ -140,6 +152,56 @@ const PRODUCTS = [
       <a class="btn" href="${esc(p.url)}" target="_blank" rel="sponsored noopener">View on Amazon</a>
     </article>`).join("");
   document.getElementById("year").textContent = new Date().getFullYear();
+})();
+
+/* =========================================================
+   CHRISTMAS GIFT IDEAS — same fields as PRODUCTS, plus
+     group: which age group heading the card goes under
+   ========================================================= */
+const GIFT_GROUPS = {"Ages 3–5": "🧸 Little Elves", "Ages 6–8": "🛠️ Workshop Helpers", "Ages 9–12": "🔬 Junior Scientists", "Ages 13–15": "🛰️ Teen Inventors", "More Gift Picks": "🎁 Bonus Pick"};
+const GIFTS = [
+  {"group": "Ages 3–5", "icon": "🧲", "name": "MAGNA-TILES Classic 32-Piece Magnetic Construction Set", "tip": "Click-clack magnet tiles — build castles, rockets and rainbow towers that actually stick together!", "url": "https://www.amazon.com/dp/B000CBSNKQ?tag=verdantlink0d-20"},
+  {"group": "Ages 3–5", "icon": "🐶", "name": "Learning Resources Coding Critters Ranger & Zip", "tip": "A storybook puppy you program with buttons — real coding thinking before kids can even read.", "url": "https://www.amazon.com/dp/B07P5P3V5G?tag=verdantlink0d-20"},
+  {"group": "Ages 3–5", "icon": "🔭", "name": "Educational Insights GeoSafari Kidnoculars", "tip": "Big comfy eyepieces made for little faces — perfect for backyard bird-spotting nature walks.", "url": "https://www.amazon.com/dp/B00B1Z6EPS?tag=verdantlink0d-20"},
+  {"group": "Ages 3–5", "icon": "🎲", "name": "ThinkFun Zingo Bingo", "tip": "Super-fast picture bingo with a slide-down Zinger — sneaky early-reading practice that feels like a party.", "url": "https://www.amazon.com/dp/B01DY818JG?tag=verdantlink0d-20"},
+  {"group": "Ages 3–5", "icon": "🐣", "name": "Peaceable Kingdom Count Your Chickens Cooperative Game", "tip": "Everyone plays as a team to get the chicks home — counting practice with zero sore losers.", "url": "https://www.amazon.com/dp/B004HVKAAS?tag=verdantlink0d-20"},
+  {"group": "Ages 3–5", "icon": "🎨", "name": "Crayola Spill Proof Paint Set", "tip": "Washable paints in no-spill cups, so little artists can go wild and mom's table survives.", "url": "https://www.amazon.com/dp/B08LHDD1NZ?tag=verdantlink0d-20"},
+  {"group": "Ages 6–8", "icon": "🤖", "name": "Learning Resources Botley 2.0 The Coding Robot Activity Set", "tip": "A screen-free robot you program to zoom through mazes — beep boop, coding is cool!", "url": "https://www.amazon.com/dp/B083T58PKM?tag=verdantlink0d-20"},
+  {"group": "Ages 6–8", "icon": "⚡", "name": "Snap Circuits Jr. SC-100 Electronics Kit", "tip": "Snap parts together to make lights, sirens and a flying fan — 100+ real electronics projects.", "url": "https://www.amazon.com/dp/B00008BFZH?tag=verdantlink0d-20"},
+  {"group": "Ages 6–8", "icon": "⚙️", "name": "Klutz LEGO Chain Reactions", "tip": "Build crazy domino-style contraptions where one thing knocks the next — physics, but silly.", "url": "https://www.amazon.com/dp/0545703301?tag=verdantlink0d-20"},
+  {"group": "Ages 6–8", "icon": "🌀", "name": "Spirograph Deluxe Set", "tip": "Spin gears to draw mind-bending spirals — where art and geometry secretly team up.", "url": "https://www.amazon.com/dp/B009VE38CI?tag=verdantlink0d-20"},
+  {"group": "Ages 6–8", "icon": "🌋", "name": "National Geographic Earth Science Kit (100+ Activities)", "tip": "Grow crystals, erupt a volcano and dig for real gemstones — a whole science unit in one box.", "url": "https://www.amazon.com/dp/B082ZLM39R?tag=verdantlink0d-20"},
+  {"group": "Ages 6–8", "icon": "🍣", "name": "Sushi Go Party! Card Game", "tip": "Adorable sushi cards you pick and pass — quick strategy and adding practice for family game night.", "url": "https://www.amazon.com/dp/B01CETNKE2?tag=verdantlink0d-20"},
+  {"group": "Ages 9–12", "icon": "💎", "name": "National Geographic Hobby Rock Tumbler Kit", "tip": "Turn rough rocks into shiny gems — a geology lesson you can hold in your hand.", "url": "https://www.amazon.com/dp/B01LQCIL88?tag=verdantlink0d-20"},
+  {"group": "Ages 9–12", "icon": "🚀", "name": "Estes Tandem-X Rocket-Building Kit (with launch pad & controller)", "tip": "Build two real flying rockets and launch them WAY up into the sky. 3… 2… 1… LIFTOFF!", "url": "https://www.amazon.com/dp/B002VLP67S?tag=verdantlink0d-20"},
+  {"group": "Ages 9–12", "icon": "🔧", "name": "Klutz LEGO Gadgets STEM Activity Kit", "tip": "Build working gadgets with gears and levers — engineering with LEGO bricks.", "url": "https://www.amazon.com/dp/1338219634?tag=verdantlink0d-20"},
+  {"group": "Ages 9–12", "icon": "🧪", "name": "National Geographic Amazing Chemistry Set (100+ Experiments)", "tip": "Fizzing, bubbling, color-changing experiments — become a mad (but safe) scientist.", "url": "https://www.amazon.com/dp/B093CPZYR8?tag=verdantlink0d-20"},
+  {"group": "Ages 9–12", "icon": "🧗", "name": "Spin Master Suspend Balancing Game", "tip": "Hang wobbly rods without making the whole tower crash — steady hands win!", "url": "https://www.amazon.com/dp/B007EA4UBY?tag=verdantlink0d-20"},
+  {"group": "Ages 9–12", "icon": "📘", "name": "The Way Things Work: Newly Revised Edition (David Macaulay)", "tip": "Explains how everything from zippers to computers works — with a woolly mammoth. Seriously.", "url": "https://www.amazon.com/dp/0544824385?tag=verdantlink0d-20"},
+  {"group": "Ages 13–15", "icon": "💻", "name": "Official Arduino Starter Kit (K000007) with English Projects Book", "tip": "Wire up circuits and write real code to make 12 projects — the gateway to building your own robots.", "url": "https://www.amazon.com/dp/B009UKZV0A?tag=verdantlink0d-20"},
+  {"group": "Ages 13–15", "icon": "🌌", "name": "Celestron StarSense Explorer DX 130AZ Smartphone-Guided Telescope", "tip": "Your phone guides you to planets, moons and galaxies — astronomy class from your driveway.", "url": "https://www.amazon.com/dp/B083JRF1MH?tag=verdantlink0d-20"},
+  {"group": "Ages 13–15", "icon": "🏎️", "name": "LEGO Technic BMW M4 GT3 EVO Race Car 42226", "tip": "A detailed race car build with real-working mechanical parts for future engineers.", "url": "https://www.amazon.com/dp/B0FMYT1SHV?tag=verdantlink0d-20"},
+  {"group": "Ages 13–15", "icon": "✏️", "name": "Prismacolor Premier Colored Pencils, 48 Count", "tip": "Pro-level soft-core pencils that blend like butter — for sketchbooks and nature journals.", "url": "https://www.amazon.com/dp/B00006IEEV?tag=verdantlink0d-20"},
+  {"group": "Ages 13–15", "icon": "🧩", "name": "Rubik's 3x3 Magnetic Speed Cube", "tip": "Magnetic, super-smooth turning — learn algorithms and chase a new personal record.", "url": "https://www.amazon.com/dp/B0CSYGLWN5?tag=verdantlink0d-20"},
+  {"group": "Ages 13–15", "icon": "🏝️", "name": "CATAN Board Game (6th Edition)", "tip": "Trade, build and settle an island — strategy, negotiation and a little economics.", "url": "https://www.amazon.com/dp/B0DYK1ZH2D?tag=verdantlink0d-20"},
+  {"group": "More Gift Picks", "icon": "🏎️", "name": "Hot Wheels Action Loop Cyclone Challenge Track Set", "tip": "The Cyclone Challenge loop is super fun and it folds up for storage.", "url": "https://www.amazon.com/dp/B0CKJ6WGWW?tag=verdantlink0d-20"}
+];
+
+/* Renders the gift groups — no need to edit below this line. */
+(function () {
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const card = p => `
+    <article class="card">
+      <div class="top"><div class="ico" aria-hidden="true">${esc(p.icon)}</div><h3 class="name">${esc(p.name)}</h3></div>
+      <p class="tip">${esc(p.tip)}</p>
+      <a class="btn" href="${esc(p.url)}" target="_blank" rel="sponsored noopener">View on Amazon</a>
+    </article>`;
+  const order = [...new Set(GIFTS.map(g => g.group))];
+  document.getElementById("gift-groups").innerHTML = order.map(g => `
+    <div class="group">
+      <h2><span class="badge">${esc(g)}</span> ${esc(GIFT_GROUPS[g] || "")}</h2>
+      <div class="grid">${GIFTS.filter(p => p.group === g).map(card).join("")}</div>
+    </div>`).join("");
 })();
 </script>
 </body>
