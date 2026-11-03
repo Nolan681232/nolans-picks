@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nolan's Picks · Our Family Emergency Kit</title>
+<meta name="description" content="A few simple emergency-kit basics our family keeps on hand, just in case.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--ink:#24433f;--deep:#1f4f49;--muted:#3d5e59;--accent:#4f8a80;--sand:#f7e3b8;--card:#fffdf8;--mint:#e6f1ee}
+html{scroll-behavior:smooth}
+body{font-family:'Nunito',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:var(--ink);background:linear-gradient(160deg,#eaf4f1 0%,#dcebe6 55%,#cfe3e0 100%);background-attachment:fixed;line-height:1.5;min-height:100vh}
+a{color:var(--deep)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+nav{display:flex;justify-content:space-between;align-items:center;padding:18px 0;flex-wrap:wrap;gap:8px}
+.brand{font-weight:900;font-size:1.3rem;color:var(--deep);text-decoration:none}
+nav ul{list-style:none;display:flex;gap:18px}
+nav ul a{text-decoration:none;font-weight:700;color:var(--muted);font-size:.95rem}
+.disclosure{background:var(--sand);color:var(--deep);border-radius:14px;padding:10px 16px;font-weight:700;font-size:.95rem;text-align:center;margin:4px 0 0}
+header.hero{position:relative;padding:44px 0 26px;overflow:hidden}
+.eyebrow{font-weight:800;letter-spacing:3px;font-size:.8rem;color:var(--accent);text-transform:uppercase}
+h1{font-size:clamp(2.3rem,7vw,4rem);font-weight:900;line-height:1.05;color:var(--deep);margin-top:8px}
+.sub{font-size:clamp(1.05rem,2.6vw,1.35rem);font-weight:600;color:#3d6660;margin-top:12px;max-width:640px}
+h2{font-size:1.6rem;font-weight:900;color:var(--deep);margin-bottom:12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:10px 0 30px}
+.card{background:var(--card);border-radius:24px;padding:24px;box-shadow:0 6px 18px rgba(36,67,63,.08);display:flex;flex-direction:column}
+.top{display:flex;align-items:center;gap:14px}
+.ico{font-size:2rem;width:60px;height:60px;flex:0 0 60px;border-radius:18px;background:var(--mint);display:flex;align-items:center;justify-content:center}
+.name{font-size:1.25rem;font-weight:900;color:var(--deep);line-height:1.2}
+.tip{font-size:1rem;font-weight:600;color:var(--muted);margin:14px 0 18px;flex:1}
+.btn{display:inline-block;text-align:center;background:var(--deep);color:#fff;text-decoration:none;font-weight:800;padding:12px 18px;border-radius:999px;transition:background .2s}
+.btn:hover,.btn:focus{background:var(--accent)}
+section.panel{background:rgba(255,253,248,.75);border-radius:24px;padding:24px;margin:0 0 20px}
+section.panel p{color:var(--muted);font-weight:600}
+section.panel p+p{margin-top:10px}
+footer{padding:26px 0 40px;text-align:center;color:#4f6f6a;font-size:.9rem;font-weight:600}
+footer p+p{margin-top:6px}
+@media (max-width:520px){nav ul{gap:12px}.card{padding:20px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="brand" href="#">🌿 Nolan's Picks</a>
+    <ul><li><a href="#picks">Picks</a></li><li><a href="#about">About</a></li><li><a href="#privacy">Privacy</a></li></ul>
+  </nav>
+
+  <!-- Required Amazon Associates disclosure (top) -->
+  <p class="disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+
+  <header class="hero">
+    <div class="eyebrow">Family preparedness</div>
+    <h1>Our Family<br>Emergency Kit</h1>
+    <p class="sub">A few simple basics we keep on hand, just in case. Calm, practical, and ready when you need them. 🌿</p>
+  </header>
+
+  <main>
+    <section id="picks" aria-label="Emergency kit picks">
+      <div class="grid" id="product-grid"><!-- cards are rendered from the PRODUCTS list below --></div>
+      <noscript><p>Please enable JavaScript to see the product list.</p></noscript>
+    </section>
+
+    <section class="panel" id="about">
+      <h2>About</h2>
+      <p>Hi, I'm Nolan. This is a short list of the emergency-kit basics our family actually keeps around for storms, power outages, and the occasional camping trip. Nothing fancy, just useful things that give a little peace of mind.</p>
+      <p>Quick tips: store your kit somewhere easy to reach, check it a couple of times a year, and rotate food and water so nothing expires.</p>
+    </section>
+
+    <section class="panel" id="privacy">
+      <h2>Privacy</h2>
+      <p>This site doesn't use accounts, forms, or its own cookies, and it doesn't collect your personal information. Product links go to Amazon, which may use cookies to track referrals for the Amazon Associates program. Amazon's own privacy policy applies once you're on their site.</p>
+    </section>
+  </main>
+
+  <footer>
+    <!-- Required Amazon Associates disclosure (footer) -->
+    <p><strong>As an Amazon Associate I earn from qualifying purchases.</strong></p>
+    <p>Prices and availability are shown on Amazon and may change. Always follow each product's safety instructions.</p>
+    <p>&copy; <span id="year">2026</span> Nolan's Picks</p>
+  </footer>
+</div>
+
+<script>
+/* =========================================================
+   PRODUCT LIST — to add a product, copy one { ... } block,
+   paste it at the end (keep the commas), and edit the fields:
+     icon: an emoji shown in the card
+     name: product name
+     tip:  a short helpful description
+     url:  your Amazon affiliate link (exactly as given)
+   ========================================================= */
+const PRODUCTS = [
+  {
+    icon: "🔥",
+    name: "Waterproof Matches",
+    tip: "Reliable fire starting even when things get damp. Keep them in a zip bag or waterproof jar so they stay dry.",
+    url: "https://link.amazon/B0aFMFOSq"
+  },
+  {
+    icon: "🔪",
+    name: "Survival / Utility Knife",
+    tip: "One sturdy knife covers most jobs, from opening packages to cutting rope. Grown-ups keep it handy and stored safely.",
+    url: "https://link.amazon/B0foYQzCd"
+  },
+  {
+    icon: "💧",
+    name: "LifeStraw Personal Water Filter",
+    tip: "A lightweight, handy backup to your stored water. Easy to toss in a go-bag or backpack.",
+    url: "https://link.amazon/B03EO1ghp"
+  },
+  {
+    icon: "🍳",
+    name: "Portable Camp Stove",
+    tip: "Hot meals and warm drinks when the power is out. Cook outdoors only, and keep a spare fuel canister with it.",
+    url: "https://link.amazon/B06lvBYCN"
+  },
+  {
+    icon: "⚡",
+    name: "Portable Generator",
+    tip: "Keeps essentials like the fridge and phone chargers going during an outage. Always run it outside, far from doors and windows.",
+    url: "https://link.amazon/B06R2SlB1"
+  },
+  {
+    icon: "🥫",
+    name: "Emergency Food (Ramen)",
+    tip: "Easy, shelf-stable meals that everyone will actually eat. Rotate your stock so nothing expires.",
+    url: "https://link.amazon/A0gZsKxq8"
+  }
+  // , { icon: "🔦", name: "New Product", tip: "Short helpful description.", url: "https://link.amazon/XXXXXXX" }
+];
+
+/* Renders the cards — no need to edit below this line. */
+(function () {
+  const grid = document.getElementById("product-grid");
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  grid.innerHTML = PRODUCTS.map(p => `
+    <article class="card">
+      <div class="top"><div class="ico" aria-hidden="true">${esc(p.icon)}</div><h3 class="name">${esc(p.name)}</h3></div>
+      <p class="tip">${esc(p.tip)}</p>
+      <a class="btn" href="${esc(p.url)}" target="_blank" rel="sponsored noopener">View on Amazon</a>
+    </article>`).join("");
+  document.getElementById("year").textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
