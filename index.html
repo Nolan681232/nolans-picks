@@ -43,6 +43,8 @@ h2 .badge{display:inline-block;background:var(--sand);color:var(--deep);border-r
 footer{padding:26px 0 40px;text-align:center;color:#4f6f6a;font-size:.9rem;font-weight:600}
 footer p+p{margin-top:6px}
 .icon-panel{display:flex;align-items:center;justify-content:center;background:var(--mint);border-radius:16px;height:120px;margin:0 0 16px;font-size:3.2rem;box-shadow:inset 0 0 0 1px rgba(36,67,63,.06)}
+.thumb .icon-panel{width:100%;height:100%;margin:0}
+.cover-credit{font-size:.85rem;font-weight:600;color:var(--muted);margin:-8px 0 22px}
 .for-line{font-size:.95rem;font-weight:800;color:var(--deep);margin:8px 0 0}
 #birthday .disclosure{margin-top:16px}
 #birthday .btn{width:100%}
@@ -114,20 +116,25 @@ a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
         <h2><span class="badge">Books</span> Ones that come back off the shelf</h2>
         <div class="grid">
           <article class="card">
-            <div class="icon-panel" aria-hidden="true">👨‍🍳</div>
+            <a class="thumb" href="https://www.amazon.com/dp/1492670022?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">
+              <img src="https://covers.openlibrary.org/b/isbn/9781492670025-L.jpg" width="287" height="360" loading="lazy" decoding="async" alt="Hardcover cover of The Complete Cookbook for Young Chefs by America's Test Kitchen Kids" data-icon="👨‍🍳" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'icon-panel',textContent:this.dataset.icon,ariaHidden:'true'}))">
+            </a>
             <h3 class="name">The Complete Cookbook for Young Chefs</h3>
             <p class="for-line">Hardcover · America’s Test Kitchen Kids</p>
             <p class="tip">More than 100 recipes for breakfast, snacks, dinner, and dessert, tested by more than 750 kids. It is a New York Times bestseller and the 2019 IACP Children, Youth &amp; Family cookbook award winner. A good fit for a child who wants to cook, with a grown-up nearby for the stove and knives. The publisher lists it for about age 8 and up, grades 4–8. This link is the hardcover, so confirm the format on Amazon.</p>
             <a class="btn" href="https://www.amazon.com/dp/1492670022?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">Check price on Amazon<span class="sr-only"> (opens in a new tab)</span></a>
           </article>
           <article class="card">
-            <div class="icon-panel" aria-hidden="true">💛</div>
+            <a class="thumb" href="https://www.amazon.com/dp/0375869026?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">
+              <img src="https://covers.openlibrary.org/b/isbn/9780375869020-L.jpg" width="197" height="300" loading="lazy" decoding="async" alt="Hardcover cover of Wonder by R. J. Palacio, with the title written across an illustrated face" data-icon="💛" onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'icon-panel',textContent:this.dataset.icon,ariaHidden:'true'}))">
+            </a>
             <h3 class="name">Wonder</h3>
             <p class="for-line">Hardcover · R. J. Palacio</p>
             <p class="tip">August Pullman starts school, and the people around him have to decide what kindness looks like. It is a long-running New York Times children’s bestseller for about ages 8–12, and it still works as a family read-aloud. This link is the hardcover. Other formats are sold separately, so check the format before you buy.</p>
             <a class="btn" href="https://www.amazon.com/dp/0375869026?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">Check price on Amazon<span class="sr-only"> (opens in a new tab)</span></a>
           </article>
         </div>
+        <p class="cover-credit">Book covers from Open Library: <a href="https://openlibrary.org/isbn/9781492670025">The Complete Cookbook for Young Chefs</a> and <a href="https://openlibrary.org/isbn/9780375869020">Wonder</a>.</p>
       </div>
     </section>
 
