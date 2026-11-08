@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nolan's Picks · Our Family Emergency Kit</title>
-<meta name="description" content="A few simple emergency-kit basics our family keeps on hand, just in case.">
+<title>Nolan's Picks · Emergency Kit &amp; Gift Ideas</title>
+<meta name="description" content="Family emergency-kit basics, Christmas gift ideas, and birthday presents for readers. As an Amazon Associate I earn from qualifying purchases.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{--ink:#24433f;--deep:#1f4f49;--muted:#3d5e59;--accent:#4f8a80;--sand:#f7e3b8;--card:#fffdf8;--mint:#e6f1ee}
@@ -22,7 +22,7 @@ header.hero{position:relative;padding:44px 0 26px;overflow:hidden}
 h1{font-size:clamp(2.3rem,7vw,4rem);font-weight:900;line-height:1.05;color:var(--deep);margin-top:8px}
 .sub{font-size:clamp(1.05rem,2.6vw,1.35rem);font-weight:600;color:#3d6660;margin-top:12px;max-width:640px}
 h2{font-size:1.6rem;font-weight:900;color:var(--deep);margin-bottom:12px}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px;padding:10px 0 30px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,280px),1fr));gap:20px;padding:10px 0 30px}
 .card{background:var(--card);border-radius:24px;padding:24px;box-shadow:0 6px 18px rgba(36,67,63,.08);display:flex;flex-direction:column}
 .top{display:flex;align-items:center;gap:14px}
 .ico{font-size:2rem;width:60px;height:60px;flex:0 0 60px;border-radius:18px;background:var(--mint);display:flex;align-items:center;justify-content:center}
@@ -42,14 +42,25 @@ h2 .badge{display:inline-block;background:var(--sand);color:var(--deep);border-r
 .group h2{margin-top:10px}
 footer{padding:26px 0 40px;text-align:center;color:#4f6f6a;font-size:.9rem;font-weight:600}
 footer p+p{margin-top:6px}
+.icon-panel{display:flex;align-items:center;justify-content:center;background:var(--mint);border-radius:16px;height:120px;margin:0 0 16px;font-size:3.2rem;box-shadow:inset 0 0 0 1px rgba(36,67,63,.06)}
+.for-line{font-size:.95rem;font-weight:800;color:var(--deep);margin:8px 0 0}
+#birthday .disclosure{margin-top:16px}
+#birthday .btn{width:100%}
+#birthday .feature{grid-column:1 / -1;display:grid;grid-template-columns:148px 1fr;gap:8px 22px;align-items:center}
+#birthday .feature .icon-panel{height:148px;margin:0}
+#birthday .feature .btn{width:auto;min-width:240px;justify-self:start}
+@media (max-width:640px){#birthday .feature{grid-template-columns:1fr}#birthday .feature .btn{width:100%}}
+#picks,#gifts,#birthday,#about,#privacy{scroll-margin-top:12px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
 @media (max-width:520px){nav ul{gap:12px}.card{padding:20px}}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <nav>
+  <nav aria-label="Primary">
     <a class="brand" href="#">🌿 Nolan's Picks</a>
-    <ul><li><a href="#picks">Picks</a></li><li><a href="#gifts">Gift Ideas</a></li><li><a href="#about">About</a></li><li><a href="#privacy">Privacy</a></li></ul>
+    <ul><li><a href="#picks">Picks</a></li><li><a href="#gifts">Gift Ideas</a></li><li><a href="#birthday">Birthday</a></li><li><a href="#about">About</a></li><li><a href="#privacy">Privacy</a></li></ul>
   </nav>
 
   <!-- Required Amazon Associates disclosure (top) -->
@@ -74,6 +85,50 @@ footer p+p{margin-top:6px}
         <p class="sub">Fun, hands-on gifts for curious kids, grouped by age.</p>
       </div>
       <div id="gift-groups"><!-- groups are rendered from the GIFTS list below --></div>
+    </section>
+
+    <section id="birthday" aria-labelledby="birthday-heading">
+      <div class="section-head">
+        <div class="eyebrow">Birthday gifts</div>
+        <h2 id="birthday-heading">🎂 Birthday Presents That Actually Get Used</h2>
+        <p class="sub">Three gifts for readers: a Kindle Paperwhite, a kids’ cookbook, and a novel families keep passing around. Prices change often, so check Amazon for today’s price.</p>
+        <p class="disclosure">As an Amazon Associate I earn from qualifying purchases.</p>
+      </div>
+
+      <div class="group">
+        <h2><span class="badge">Kindle</span> A reader, not another phone</h2>
+        <div class="grid">
+          <article class="card feature">
+            <div class="icon-panel" aria-hidden="true">📖</div>
+            <div>
+            <h3 class="name">Amazon Kindle Paperwhite 16GB (2024 model) – Black</h3>
+            <p class="for-line">For independent readers and adults</p>
+            <p class="tip">A dedicated e-reader with a 7-inch glare-free screen, an adjustable warm light, and no social apps. Amazon rates the battery at up to 12 weeks for about 30 minutes of reading a day with wireless off, and rates it IPX8 after a fresh-water test (2 meters for 60 minutes). This button opens the 2024 black 16GB model. Amazon also points to a newer Paperwhite, so confirm the year, color, and storage on the listing. A cover is sold separately.</p>
+            <a class="btn" href="https://www.amazon.com/dp/B0CFPJYX7P?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">Check price on Amazon<span class="sr-only"> (opens in a new tab)</span></a>
+            </div>
+          </article>
+        </div>
+      </div>
+
+      <div class="group">
+        <h2><span class="badge">Books</span> Ones that come back off the shelf</h2>
+        <div class="grid">
+          <article class="card">
+            <div class="icon-panel" aria-hidden="true">👨‍🍳</div>
+            <h3 class="name">The Complete Cookbook for Young Chefs</h3>
+            <p class="for-line">Hardcover · America’s Test Kitchen Kids</p>
+            <p class="tip">More than 100 recipes for breakfast, snacks, dinner, and dessert, tested by more than 750 kids. It is a New York Times bestseller and the 2019 IACP Children, Youth &amp; Family cookbook award winner. A good fit for a child who wants to cook, with a grown-up nearby for the stove and knives. The publisher lists it for about age 8 and up, grades 4–8. This link is the hardcover, so confirm the format on Amazon.</p>
+            <a class="btn" href="https://www.amazon.com/dp/1492670022?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">Check price on Amazon<span class="sr-only"> (opens in a new tab)</span></a>
+          </article>
+          <article class="card">
+            <div class="icon-panel" aria-hidden="true">💛</div>
+            <h3 class="name">Wonder</h3>
+            <p class="for-line">Hardcover · R. J. Palacio</p>
+            <p class="tip">August Pullman starts school, and the people around him have to decide what kindness looks like. It is a long-running New York Times children’s bestseller for about ages 8–12, and it still works as a family read-aloud. This link is the hardcover. Other formats are sold separately, so check the format before you buy.</p>
+            <a class="btn" href="https://www.amazon.com/dp/0375869026?tag=verdantlink0d-20" target="_blank" rel="sponsored noopener">Check price on Amazon<span class="sr-only"> (opens in a new tab)</span></a>
+          </article>
+        </div>
+      </div>
     </section>
 
     <section class="panel" id="about">
