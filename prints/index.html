@@ -29,9 +29,6 @@
                   Example: "img/desk-rocket.jpg"
                   Put the file in prints/img/ first.
                   A missing file shows the plain placeholder.
-     colors       Optional. Color choices, like
-                  ["White", "Blue"]. Delete this line if
-                  the print only comes in one color.
 
    Cards whose name or description contains
    "Example – replace me" get an example badge. Delete
@@ -46,28 +43,25 @@ const PRODUCTS = [
     name: "Desk Rocket",
     description: "Example – replace me. A stand-in for a shelf-size rocket, not a print you can order yet.",
     price: "Price TBD",
-    image: "img/placeholder.svg",
-    colors: ["White", "Orange"]
+    image: "img/placeholder.svg"
   },
   {
     name: "Mini Glider",
     description: "Example – replace me. A stand-in for a pocket-size glider, not a print you can order yet.",
     price: "Price TBD",
-    image: "img/placeholder.svg",
-    colors: ["White", "Sky blue"]
+    image: "img/placeholder.svg"
   },
   {
     name: "Gear Keychain",
     description: "Example – replace me. A stand-in for a gear-shaped keychain, not a print you can order yet.",
     price: "Price TBD",
-    image: "img/placeholder.svg",
-    colors: ["Gray", "Black"]
+    image: "img/placeholder.svg"
   }
 ];
 </script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#152033;--muted:#3f5163;--navy:#12315c;--blue:#1557a8;--line:#e3eaf2;--paper:#f4f7fb;--card:#fff;--chip:#eef3f8}
+:root{--ink:#152033;--muted:#3f5163;--navy:#12315c;--blue:#1557a8;--line:#e3eaf2;--paper:#f4f7fb;--card:#fff}
 html{scroll-behavior:smooth}
 body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh}
 body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(18,49,92,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(18,49,92,.035) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
@@ -80,10 +74,7 @@ img{max-width:100%;display:block}
 h1{font-size:clamp(2.1rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em;font-weight:800;color:var(--navy);margin-top:10px}
 .tagline{margin-top:12px;max-width:38rem;font-size:clamp(1.05rem,2.4vw,1.28rem);font-weight:600;color:#314556}
 .note{margin-top:12px;max-width:40rem;color:var(--muted);font-weight:600}
-.hero-links{margin-top:16px}
-.hero-links a{font-weight:800;text-decoration:none}
-.hero-links a:hover,.hero-links a:focus-visible{text-decoration:underline}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px;padding:22px 0 8px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px;padding:22px 0 36px}
 .card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(18,49,92,.06);display:flex;flex-direction:column;min-width:0}
 .photo{position:relative;aspect-ratio:4/3;background-color:#e7edf3;background-image:linear-gradient(#d5dee8 1px,transparent 1px),linear-gradient(90deg,#d5dee8 1px,transparent 1px);background-size:28px 28px}
 .photo img{width:100%;height:100%;object-fit:cover}
@@ -91,18 +82,10 @@ h1{font-size:clamp(2.1rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em;fon
 .card-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
 .name{font-size:1.2rem;line-height:1.25;font-weight:800;color:var(--navy);overflow-wrap:anywhere}
 .desc{color:var(--muted);font-weight:600;flex:1}
-.colors{display:flex;flex-wrap:wrap;gap:6px;list-style:none}
-.colors li{background:var(--chip);color:var(--navy);border-radius:999px;padding:4px 10px;font-size:.85rem;font-weight:700}
 .price{font-weight:800;color:var(--navy)}
 .btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 18px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none;font-weight:800;text-align:center;line-height:1.25}
 .card .btn{width:100%}
 .btn:hover,.btn:focus-visible{background:var(--blue)}
-.order{margin:28px 0 36px;background:#fff;border:1px solid var(--line);border-radius:20px;padding:22px}
-.order h2{font-size:clamp(1.4rem,3vw,1.7rem);font-weight:800;color:var(--navy);margin-bottom:8px}
-.order p,.order li{color:var(--muted);font-weight:600}
-.order ol{margin:14px 0 18px;padding-left:1.25rem}
-.order li+li{margin-top:6px}
-.order .btn{margin-top:2px}
 .site-footer{padding:4px 0 40px;color:var(--muted);font-weight:600}
 .footer-links{display:flex;flex-wrap:wrap;gap:4px 18px}
 .footer-links a{font-weight:800;padding:6px 0}
@@ -110,7 +93,7 @@ h1{font-size:clamp(2.1rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em;fon
 .empty{color:var(--muted);font-weight:600;padding:12px 0 24px}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
-@media (max-width:480px){.wrap{padding:0 16px}.hero{padding-top:28px}.order{padding:18px}}
+@media (max-width:480px){.wrap{padding:0 16px}.hero{padding-top:28px}}
 </style>
 </head>
 <body>
@@ -120,7 +103,6 @@ a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
     <h1>Nolan's 3D Prints</h1>
     <p class="tagline">Custom 3D-printed builds by a future aerospace engineer</p>
     <p class="note">The cards below are examples. Real prints will replace them.</p>
-    <p class="hero-links"><a href="#how-to-order">How to order</a></p>
   </div>
 </header>
 <main>
@@ -128,16 +110,6 @@ a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
     <section aria-label="Prints">
       <div class="grid" id="product-grid"></div>
       <noscript><p class="empty">JavaScript is off, so the print list is hidden. You can still message Nolan on Facebook at https://m.me/Thepilotnolan.</p></noscript>
-    </section>
-    <section class="order" id="how-to-order" aria-labelledby="order-heading">
-      <h2 id="order-heading">How to order</h2>
-      <p>Message me on Facebook with the item and color, and I'll confirm price and pickup or shipping.</p>
-      <ol>
-        <li>Pick a print and a color from the cards above.</li>
-        <li>Message me on Facebook with the item and color.</li>
-        <li>I'll confirm the price and pickup or shipping.</li>
-      </ol>
-      <a class="btn" href="https://m.me/Thepilotnolan" target="_blank" rel="noopener noreferrer">Message me on Facebook<span class="sr-only"> (opens in a new tab)</span></a>
     </section>
   </div>
 </main>
@@ -172,20 +144,15 @@ a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
       const src = safeSrc(p.image);
       const marked = isExample(p);
       const alt = marked || !src || /placeholder/i.test(src) ? "Neutral placeholder, not a product photo" : name;
-      const colors = Array.isArray(p.colors) ? p.colors.filter(Boolean) : [];
       const photo = src
         ? `<img src="${esc(src)}" alt="${esc(alt)}" width="800" height="600" decoding="async">`
         : "";
       const badge = marked ? '<p class="badge">Example – replace me</p>' : "";
-      const colorList = colors.length
-        ? `<ul class="colors" aria-label="Colors">${colors.map(c => `<li>${esc(c)}</li>`).join("")}</ul>`
-        : "";
       return `<article class="card">
         <div class="photo">${photo}${badge}</div>
         <div class="card-body">
           <h3 class="name">${esc(name)}</h3>
           <p class="desc">${esc(p.description || "")}</p>
-          ${colorList}
           <p class="price">${esc(price)}</p>
           <a class="btn" href="${esc(ORDER_URL)}" target="_blank" rel="noopener noreferrer">Order / Ask about this<span class="sr-only">: ${esc(name)} (opens in a new tab)</span></a>
         </div>
