@@ -3,113 +3,84 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nolan's 3D Prints</title>
-<meta name="description" content="Custom 3D-printed builds by a future aerospace engineer. Message Nolan on Facebook to ask about a print.">
-<meta name="theme-color" content="#12315c">
-<!--
-  Shop items live in the PRODUCTS list in the first script below.
-  Put product photos in the prints/img/ folder.
--->
-<script>
-/* =========================================================
-   PRINTS — this is the only list to edit.
-
-   Each { ... } block inside the [ ] is one product card.
-   To add a print: copy a whole block, paste it after the
-   last one (keep a comma between blocks), and change the
-   fields. To remove a print, delete its block.
-
-   Fields:
-     name         The name on the card.
-     description  One or two sentences about the print.
-     price        The price words to show. These examples
-                  say "Price TBD". When you know a price,
-                  type it here instead, like "$12".
-     image        Path to a photo in the prints/img/ folder.
-                  Example: "img/desk-rocket.jpg"
-                  Put the file in prints/img/ first.
-                  A missing file shows the plain placeholder.
-
-   Cards whose name or description contains
-   "Example – replace me" get an example badge. Delete
-   that phrase once the card is a real print.
-
-   Every "Order / Ask about this" button opens
-   https://m.me/Thepilotnolan in a new tab. That link
-   is not set on each product.
-   ========================================================= */
-const PRODUCTS = [
-  {
-    name: "Desk Rocket",
-    description: "Example – replace me. A stand-in for a shelf-size rocket, not a print you can order yet.",
-    price: "Price TBD",
-    image: "img/placeholder.svg"
-  },
-  {
-    name: "Mini Glider",
-    description: "Example – replace me. A stand-in for a pocket-size glider, not a print you can order yet.",
-    price: "Price TBD",
-    image: "img/placeholder.svg"
-  },
-  {
-    name: "Gear Keychain",
-    description: "Example – replace me. A stand-in for a gear-shaped keychain, not a print you can order yet.",
-    price: "Price TBD",
-    image: "img/placeholder.svg"
-  }
-];
+<title>Nolan's 3D Prints | Phone Stands &amp; Engineering Builds</title>
+<meta name="description" content="Custom 3D printing and engineering builds from the Florida Gulf Coast. The GravityAssist Phone Stand holds a phone in landscape. Designed and printed by Nolan.">
+<link rel="canonical" href="https://nolan681232.github.io/nolans-picks/prints/">
+<meta property="og:title" content="Nolan's 3D Prints | Phone Stands &amp; Engineering Builds">
+<meta property="og:description" content="Custom 3D printing and engineering builds from the Florida Gulf Coast, including the GravityAssist Phone Stand.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://nolan681232.github.io/nolans-picks/prints/">
+<meta property="og:image" content="https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-1.jpg">
+<meta property="og:site_name" content="Nolan's 3D Prints">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nolan's 3D Prints | Phone Stands &amp; Engineering Builds">
+<meta name="twitter:description" content="Custom 3D printing and engineering builds from the Florida Gulf Coast, including the GravityAssist Phone Stand.">
+<meta name="twitter:image" content="https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-1.jpg">
+<meta name="theme-color" content="#071422">
+<link rel="icon" href="img/about.png">
+<link rel="stylesheet" href="style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "name": "Nolan's 3D Prints",
+      "url": "https://nolan681232.github.io/nolans-picks/prints/",
+      "description": "Custom 3D printing and engineering builds from the Florida Gulf Coast.",
+      "publisher": {
+        "@type": "Person",
+        "name": "Nolan",
+        "url": "https://nolan681232.github.io/nolans-picks/prints/about.html"
+      }
+    },
+    {
+      "@type": "Product",
+      "name": "GravityAssist Phone Stand",
+      "description": "A sturdy 3D-printed phone stand that holds your phone in landscape for videos, calls, or Netflix. Printed in PLA (polylactic acid), a plant-based bioplastic, with a cable pass-through hole for charging.",
+      "image": [
+        "https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-1.jpg",
+        "https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-2.jpg",
+        "https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-3.jpg",
+        "https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-4.jpg",
+        "https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-5.jpg",
+        "https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-6.jpg"
+      ],
+      "brand": { "@type": "Brand", "name": "Nolan's 3D Prints" },
+      "category": "Phone stand",
+      "material": "PLA",
+      "url": "https://nolan681232.github.io/nolans-picks/prints/"
+    }
+  ]
+}
 </script>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#152033;--muted:#3f5163;--navy:#12315c;--blue:#1557a8;--line:#e3eaf2;--paper:#f4f7fb;--card:#fff}
-html{scroll-behavior:smooth}
-body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;min-height:100vh}
-body::before{content:"";position:fixed;inset:0;z-index:-1;background-image:linear-gradient(rgba(18,49,92,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(18,49,92,.035) 1px,transparent 1px);background-size:28px 28px;pointer-events:none}
-a{color:var(--blue)}
-img{max-width:100%;display:block}
-.wrap{max-width:1080px;margin:0 auto;padding:0 20px}
-.hero{padding:36px 0 12px;background:radial-gradient(900px 280px at 0% 0%,rgba(28,109,208,.14),transparent 60%),radial-gradient(700px 240px at 100% 0%,rgba(18,49,92,.07),transparent 55%)}
-.eyebrow{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.14em;font-size:.78rem;text-transform:uppercase;color:var(--blue)}
-.mark{width:8px;height:8px;background:var(--blue);transform:rotate(45deg);flex:0 0 auto}
-h1{font-size:clamp(2.1rem,6vw,3.4rem);line-height:1.05;letter-spacing:-.03em;font-weight:800;color:var(--navy);margin-top:10px}
-.tagline{margin-top:12px;max-width:38rem;font-size:clamp(1.05rem,2.4vw,1.28rem);font-weight:600;color:#314556}
-.note{margin-top:12px;max-width:40rem;color:var(--muted);font-weight:600}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:20px;padding:22px 0 36px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 10px 28px rgba(18,49,92,.06);display:flex;flex-direction:column;min-width:0}
-.photo{position:relative;aspect-ratio:4/3;background-color:#e7edf3;background-image:linear-gradient(#d5dee8 1px,transparent 1px),linear-gradient(90deg,#d5dee8 1px,transparent 1px);background-size:28px 28px}
-.photo img{width:100%;height:100%;object-fit:cover}
-.badge{position:absolute;top:12px;left:12px;max-width:calc(100% - 24px);background:#fff6df;color:#7a4e09;font-size:.78rem;font-weight:800;line-height:1.3;padding:5px 10px;border-radius:999px}
-.card-body{padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
-.name{font-size:1.2rem;line-height:1.25;font-weight:800;color:var(--navy);overflow-wrap:anywhere}
-.desc{color:var(--muted);font-weight:600;flex:1}
-.price{font-weight:800;color:var(--navy)}
-.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:12px 18px;border-radius:999px;background:var(--navy);color:#fff;text-decoration:none;font-weight:800;text-align:center;line-height:1.25}
-.card .btn{width:100%}
-.btn:hover,.btn:focus-visible{background:var(--blue)}
-.site-footer{padding:4px 0 40px;color:var(--muted);font-weight:600}
-.footer-links{display:flex;flex-wrap:wrap;gap:4px 18px}
-.footer-links a{font-weight:800;padding:6px 0}
-.site-footer p+p{margin-top:6px}
-.empty{color:var(--muted);font-weight:600;padding:12px 0 24px}
-.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
-@media (max-width:480px){.wrap{padding:0 16px}.hero{padding-top:28px}}
-</style>
 </head>
 <body>
-<header class="hero">
-  <div class="wrap">
-    <p class="eyebrow"><span class="mark" aria-hidden="true"></span> Aviation · Rockets · Engineering</p>
-    <h1>Nolan's 3D Prints</h1>
-    <p class="tagline">Custom 3D-printed builds by a future aerospace engineer</p>
-    <p class="note">The cards below are examples. Real prints will replace them.</p>
+<a class="skip" href="#content">Skip to content</a>
+<header class="site-header">
+  <div class="wrap header-bar">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">PN</span> Nolan's 3D Prints</a>
+    <nav aria-label="Prints">
+      <ul class="nav-list">
+        <li><a href="index.html" aria-current="page">Shop</a></li>
+        <li><a href="order.html">Order</a></li>
+        <li><a href="request.html">Request a Print</a></li>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
   </div>
 </header>
-<main>
+<main id="content">
   <div class="wrap">
+    <header class="hero">
+      <p class="eyebrow">Pilot in training · Florida Gulf Coast</p>
+      <h1>Nolan's 3D Prints</h1>
+      <p class="tagline">Custom 3D-printed builds by a future aerospace engineer</p>
+      <p class="note">Functional engineering builds from the Florida Gulf Coast, including a landscape phone stand. <a href="request.html">Request a custom print</a>.</p>
+    </header>
     <section aria-label="Prints">
       <div class="grid" id="product-grid"></div>
-      <noscript><p class="empty">JavaScript is off, so the print list is hidden. You can still message Nolan on Facebook at https://m.me/Thepilotnolan.</p></noscript>
+      <noscript><p class="empty">JavaScript is off, so the print list is hidden. You can still order from the <a href="order.html">order page</a>.</p></noscript>
     </section>
   </div>
 </main>
@@ -119,53 +90,83 @@ a:focus-visible{outline:3px solid var(--blue);outline-offset:3px}
       <a href="../">Nolan's Picks</a>
       <a href="https://facebook.com/Thepilotnolan" target="_blank" rel="noopener noreferrer">Facebook<span class="sr-only"> (opens in a new tab)</span></a>
     </p>
-    <p>&copy; <span id="year">2026</span> Nolan's 3D Prints</p>
+    <p>&copy; 2026 Nolan's 3D Prints</p>
   </div>
 </footer>
+<script src="products.js"></script>
 <script>
 (function () {
-  const ORDER_URL = "https://m.me/Thepilotnolan";
-  const EXAMPLE = /example\s*[–—-]\s*replace me/i;
   const grid = document.getElementById("product-grid");
   const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]));
   const safeSrc = src => {
     const s = String(src || "").trim();
-    if (!s || /^javascript:/i.test(s)) return "";
+    if (!s || /^(?:javascript|data):/i.test(s)) return "";
     return s;
   };
-  const isExample = p => EXAMPLE.test(`${p.name || ""} ${p.description || ""}`);
+  const isExample = p => /example\s*[–—-]\s*replace me/i.test(`${p.name || ""} ${p.description || ""}`);
+  const photosOf = p => (Array.isArray(p.images) ? p.images : []).map(safeSrc).filter(Boolean);
+  const altFor = (name, src, index, total) => {
+    const view = total > 1 ? `, view ${index + 1} of ${total}` : "";
+    if (/gravityassist/i.test(src)) return `${name} placeholder drawing${view}. Replace with a real photo.`;
+    if (/placeholder/i.test(src)) return "Neutral placeholder, not a product photo";
+    return `${name}${view}`;
+  };
 
   if (!Array.isArray(PRODUCTS) || PRODUCTS.length === 0) {
-    grid.innerHTML = '<p class="empty">No prints listed yet. Add one to the PRODUCTS list at the top of this file.</p>';
-  } else {
-    grid.innerHTML = PRODUCTS.map(p => {
-      const name = p.name || "Untitled print";
-      const price = p.price || "Price TBD";
-      const src = safeSrc(p.image);
-      const marked = isExample(p);
-      const alt = marked || !src || /placeholder/i.test(src) ? "Neutral placeholder, not a product photo" : name;
-      const photo = src
-        ? `<img src="${esc(src)}" alt="${esc(alt)}" width="800" height="600" decoding="async">`
-        : "";
-      const badge = marked ? '<p class="badge">Example – replace me</p>' : "";
-      return `<article class="card">
-        <div class="photo">${photo}${badge}</div>
-        <div class="card-body">
-          <h3 class="name">${esc(name)}</h3>
-          <p class="desc">${esc(p.description || "")}</p>
-          <p class="price">${esc(price)}</p>
-          <a class="btn" href="${esc(ORDER_URL)}" target="_blank" rel="noopener noreferrer">Order / Ask about this<span class="sr-only">: ${esc(name)} (opens in a new tab)</span></a>
-        </div>
-      </article>`;
-    }).join("");
-
-    grid.querySelectorAll("img").forEach(img => {
-      img.addEventListener("error", () => { img.hidden = true; });
-    });
+    grid.innerHTML = '<p class="empty">No prints listed yet. Add one in products.js.</p>';
+    return;
   }
 
-  const year = document.getElementById("year");
-  if (year) year.textContent = String(new Date().getFullYear());
+  grid.innerHTML = PRODUCTS.map(p => {
+    const name = p.name || "Untitled print";
+    const price = p.price || "Price TBD";
+    const photos = photosOf(p);
+    const marked = isExample(p);
+    const gallery = photos.length > 1;
+    const media = photos.length === 0
+      ? `<div class="photo" role="img" aria-label="Neutral placeholder, not a product photo"></div>`
+      : gallery
+        ? `<div class="gallery">
+            <img class="gallery-main" src="${esc(photos[0])}" alt="${esc(altFor(name, photos[0], 0, photos.length))}" width="1200" height="900">
+            <div class="thumbs">${photos.map((src, i) => `<button type="button" class="thumb" data-src="${esc(src)}" data-alt="${esc(altFor(name, src, i, photos.length))}" aria-label="Show photo ${i + 1} of ${photos.length}" aria-current="${i === 0 ? "true" : "false"}"><img src="${esc(src)}" alt="" width="120" height="90"></button>`).join("")}</div>
+          </div>`
+        : `<div class="photo"><img class="shot" src="${esc(photos[0])}" alt="${esc(altFor(name, photos[0], 0, 1))}" width="800" height="600"></div>`;
+    const badge = marked ? '<p class="badge">Example – replace me</p>' : "";
+    const label = !marked && p.label ? `<p class="placard">${esc(p.label)}</p>` : "";
+    return `<article class="card${gallery ? " has-gallery" : ""}">
+      ${gallery ? media : `<div class="photo-wrap">${media}${badge}</div>`}
+      <div class="card-body">
+        ${label}
+        <h2>${esc(name)}</h2>
+        <p class="desc">${esc(p.description || "")}</p>
+        <p class="price"><span>PRICE</span> ${esc(price)}</p>
+        <a class="btn" href="order.html?item=${encodeURIComponent(name)}">Order<span class="sr-only"> ${esc(name)}</span></a>
+      </div>
+    </article>`;
+  }).join("");
+
+  grid.querySelectorAll(".photo-wrap").forEach(wrap => {
+    const photo = wrap.querySelector(".photo");
+    const badge = wrap.querySelector(".badge");
+    if (photo && badge) photo.appendChild(badge);
+    wrap.replaceWith(...wrap.childNodes);
+  });
+
+  grid.querySelectorAll("img").forEach(img => {
+    img.addEventListener("error", () => { img.hidden = true; });
+  });
+  grid.querySelectorAll(".gallery").forEach(gallery => {
+    const main = gallery.querySelector(".gallery-main");
+    gallery.querySelectorAll(".thumb").forEach(btn => {
+      btn.addEventListener("click", () => {
+        main.src = btn.dataset.src;
+        main.alt = btn.dataset.alt || "";
+        gallery.querySelectorAll(".thumb").forEach(other => {
+          other.setAttribute("aria-current", other === btn ? "true" : "false");
+        });
+      });
+    });
+  });
 })();
 </script>
 </body>
