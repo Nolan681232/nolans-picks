@@ -29,7 +29,6 @@
       <ul class="nav-list">
         <li><a href="index.html">Shop</a></li>
         <li><a href="order.html" aria-current="page">Order</a></li>
-        <li><a href="request.html">Request a Print</a></li>
         <li><a href="about.html">About</a></li>
       </ul>
     </nav>
@@ -109,8 +108,31 @@
     extra.selected = true;
     select.add(extra);
   }
+  const note = document.createElement("p");
+  note.className = "ship-note";
+  note.hidden = true;
+  function showPrice() {
+    const product = (Array.isArray(PRODUCTS) ? PRODUCTS : []).find(p => p && p.name === select.value);
+    note.replaceChildren();
+    if (!product || (!product.price && !product.shippingNote)) {
+      note.hidden = true;
+      return;
+    }
+    note.hidden = false;
+    if (product.price) {
+      const strong = document.createElement("strong");
+      strong.textContent = product.price;
+      note.append(strong);
+    }
+    if (product.shippingNote) {
+      if (product.price) note.append(document.createElement("br"));
+      note.append(product.shippingNote);
+    }
+  }
+  select.addEventListener("change", showPrice);
+  showPrice();
   label.append("Item", select);
-  field.append(label);
+  field.append(label, note);
 })();
 </script>
 </body>

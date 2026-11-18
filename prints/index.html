@@ -49,7 +49,14 @@
       "brand": { "@type": "Brand", "name": "Nolan's 3D Prints" },
       "category": "Phone stand",
       "material": "PLA",
-      "url": "https://nolan681232.github.io/nolans-picks/prints/"
+      "url": "https://nolan681232.github.io/nolans-picks/prints/",
+      "offers": {
+        "@type": "Offer",
+        "price": "4.00",
+        "priceCurrency": "USD",
+        "availability": "https://schema.org/InStock",
+        "url": "https://nolan681232.github.io/nolans-picks/prints/order.html?item=GravityAssist%20Phone%20Stand"
+      }
     }
   ]
 }
@@ -64,7 +71,6 @@
       <ul class="nav-list">
         <li><a href="index.html" aria-current="page">Shop</a></li>
         <li><a href="order.html">Order</a></li>
-        <li><a href="request.html">Request a Print</a></li>
         <li><a href="about.html">About</a></li>
       </ul>
     </nav>
@@ -76,7 +82,7 @@
       <p class="eyebrow">Pilot in training · Florida Gulf Coast</p>
       <h1>Nolan's 3D Prints</h1>
       <p class="tagline">Custom 3D-printed builds by a future aerospace engineer</p>
-      <p class="note">Functional engineering builds from the Florida Gulf Coast, including a landscape phone stand. <a href="request.html">Request a custom print</a>.</p>
+      <p class="note">Functional engineering builds from the Florida Gulf Coast, including a landscape phone stand.</p>
     </header>
     <section aria-label="Prints">
       <div class="grid" id="product-grid"></div>
@@ -132,7 +138,11 @@
           </div>`
         : `<div class="photo"><img class="shot" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, 1))}" width="1200" height="800"></div>`;
     const badge = marked ? '<p class="badge">Example – replace me</p>' : "";
-    const label = !marked && p.label ? `<p class="placard">${esc(p.label)}</p>` : "";
+    const marks = [
+      !marked && p.label ? `<p class="placard">${esc(p.label)}</p>` : "",
+      p.sold ? `<p class="sold">${esc(p.sold)}</p>` : ""
+    ].filter(Boolean).join("");
+    const label = marks ? `<div class="marks">${marks}</div>` : "";
     return `<article class="card${gallery ? " has-gallery" : ""}">
       ${gallery ? media : `<div class="photo-wrap">${media}${badge}</div>`}
       <div class="card-body">
@@ -140,6 +150,7 @@
         <h2>${esc(name)}</h2>
         <p class="desc">${esc(p.description || "")}</p>
         <p class="price"><span>PRICE</span> ${esc(price)}</p>
+        ${p.shippingNote ? `<p class="ship-note">${esc(p.shippingNote)}</p>` : ""}
         <a class="btn" href="order.html?item=${encodeURIComponent(name)}">Order<span class="sr-only"> ${esc(name)}</span></a>
       </div>
     </article>`;
