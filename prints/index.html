@@ -18,7 +18,7 @@
 <meta name="twitter:image" content="https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-1.jpg">
 <meta name="theme-color" content="#071422">
 <link rel="icon" href="img/about.png">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=20261118">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -99,7 +99,7 @@
     <p>&copy; 2026 Nolo Prints</p>
   </div>
 </footer>
-<script src="products.js"></script>
+<script src="products.js?v=20261118"></script>
 <script>
 (function () {
   const grid = document.getElementById("product-grid");
@@ -110,7 +110,14 @@
     return s;
   };
   const isExample = p => /example\s*[–—-]\s*replace me/i.test(`${p.name || ""} ${p.description || ""}`);
-  const photosOf = p => (Array.isArray(p.images) ? p.images : []).map(safeSrc).filter(Boolean);
+  const versioned = src => {
+    const s = safeSrc(src);
+    if (!s) return "";
+    const v = typeof ASSET_VERSION === "string" ? ASSET_VERSION : "";
+    if (!v || /[?&]v=/.test(s)) return s;
+    return s + (s.includes("?") ? "&" : "?") + "v=" + encodeURIComponent(v);
+  };
+  const photosOf = p => (Array.isArray(p.images) ? p.images : []).map(versioned).filter(Boolean);
   const altFor = (p, src, index, total) => {
     if (Array.isArray(p.alts) && p.alts[index]) return String(p.alts[index]);
     const name = p.name || "Print";

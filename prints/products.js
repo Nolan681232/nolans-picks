@@ -29,7 +29,16 @@
    the print is real.
 
    The Order button opens order.html?item=<the product name>.
+
+   ASSET_VERSION — bump this string whenever you change a
+   product, price, or photo. Use the same value on every
+   prints page, on style.css and products.js:
+     style.css?v=20261118
+     products.js?v=20261118
+   GitHub Pages keeps the old files for about 10 minutes
+   unless the version changes.
    ========================================================= */
+const ASSET_VERSION = "20261118";
 const PRODUCTS = [
   {
     name: "GravityAssist Phone Stand",
