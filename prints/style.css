@@ -121,8 +121,17 @@ h2{font-size:1.25rem}
     conic-gradient(from 210deg,transparent 0 68%,var(--amber) 68% 76%,transparent 76%);
 }
 .desc{color:var(--muted);flex:1}
+.marks{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.sold{
+  display:inline-flex;align-items:center;border-radius:999px;
+  background:var(--amber);color:var(--amber-ink);
+  padding:4px 10px;font-family:var(--mono);font-size:.72rem;font-weight:700;letter-spacing:.04em;
+}
 .price{font-family:var(--mono);color:var(--amber);font-weight:700;letter-spacing:.03em}
 .price span{display:block;color:var(--cyan);font-size:.7rem;letter-spacing:.16em;font-weight:700}
+.ship-note{margin:0;color:var(--muted);font-size:.95rem;font-weight:600;max-width:36rem}
+.fields .ship-note{margin-top:8px}
+.ship-note strong{color:var(--amber);font-family:var(--mono)}
 .btn{
   display:inline-flex;align-items:center;justify-content:center;
   min-height:48px;padding:12px 18px;border-radius:999px;border:0;cursor:pointer;

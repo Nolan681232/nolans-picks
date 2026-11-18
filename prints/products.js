@@ -9,8 +9,7 @@
    Fields:
      name         Name on the card and in the order menu.
      description  One or two sentences about the print.
-     price        Words to show, such as "Message for price"
-                  or "Price TBD".
+     price        Words to show, such as "$4 + shipping".
      images       Photo paths in the prints/img/ folder.
                   One path is a single photo:
                     ["img/my-print.jpg"]
@@ -19,8 +18,11 @@
                   A missing file shows an empty photo frame.
      alts         Optional. One description per photo, in the
                   same order as images. Used as the image alt text.
+     shippingNote Optional sentence under the price, such as
+                  a usual shipping cost.
      label        Optional short tag, such as "FLIGHT-TESTED".
                   Delete this line if you don't want a tag.
+     sold         Optional line, such as "Sold and tested!".
 
    If the name or description contains "Example – replace me",
    the card shows an example badge. Delete that phrase when
@@ -32,7 +34,8 @@ const PRODUCTS = [
   {
     name: "GravityAssist Phone Stand",
     description: "A sturdy 3D-printed phone stand that holds your phone in landscape for videos, calls, or Netflix. Printed in PLA (polylactic acid), a plant-based bioplastic, with a cable pass-through hole for charging.",
-    price: "Message for price",
+    price: "$4 + shipping",
+    shippingNote: "US shipping is usually around $2 — I'll confirm the exact cost by email.",
     images: [
       "img/gravityassist-1.jpg",
       "img/gravityassist-2.jpg",
@@ -49,18 +52,7 @@ const PRODUCTS = [
       "GravityAssist Phone Stand from the side, with the cable hole visible, on a couch",
       "GravityAssist Phone Stand from the back on a couch"
     ],
-    label: "FLIGHT-TESTED"
-  },
-  {
-    name: "Mini Glider",
-    description: "Example – replace me. A stand-in for a pocket-size glider, not a print you can order yet.",
-    price: "Price TBD",
-    images: ["img/placeholder.svg"]
-  },
-  {
-    name: "Gear Keychain",
-    description: "Example – replace me. A stand-in for a gear-shaped keychain, not a print you can order yet.",
-    price: "Price TBD",
-    images: ["img/placeholder.svg"]
+    label: "FLIGHT-TESTED",
+    sold: "Sold and tested!"
   }
 ];
