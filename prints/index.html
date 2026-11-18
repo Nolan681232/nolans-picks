@@ -105,11 +105,11 @@
   };
   const isExample = p => /example\s*[–—-]\s*replace me/i.test(`${p.name || ""} ${p.description || ""}`);
   const photosOf = p => (Array.isArray(p.images) ? p.images : []).map(safeSrc).filter(Boolean);
-  const altFor = (name, src, index, total) => {
-    const view = total > 1 ? `, view ${index + 1} of ${total}` : "";
-    if (/gravityassist/i.test(src)) return `${name} placeholder drawing${view}. Replace with a real photo.`;
+  const altFor = (p, src, index, total) => {
+    if (Array.isArray(p.alts) && p.alts[index]) return String(p.alts[index]);
+    const name = p.name || "Print";
     if (/placeholder/i.test(src)) return "Neutral placeholder, not a product photo";
-    return `${name}${view}`;
+    return total > 1 ? `${name}, photo ${index + 1} of ${total}` : name;
   };
 
   if (!Array.isArray(PRODUCTS) || PRODUCTS.length === 0) {
@@ -127,10 +127,10 @@
       ? `<div class="photo" role="img" aria-label="Neutral placeholder, not a product photo"></div>`
       : gallery
         ? `<div class="gallery">
-            <img class="gallery-main" src="${esc(photos[0])}" alt="${esc(altFor(name, photos[0], 0, photos.length))}" width="1200" height="900">
-            <div class="thumbs">${photos.map((src, i) => `<button type="button" class="thumb" data-src="${esc(src)}" data-alt="${esc(altFor(name, src, i, photos.length))}" aria-label="Show photo ${i + 1} of ${photos.length}" aria-current="${i === 0 ? "true" : "false"}"><img src="${esc(src)}" alt="" width="120" height="90"></button>`).join("")}</div>
+            <img class="gallery-main" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, photos.length))}" width="1200" height="800">
+            <div class="thumbs">${photos.map((src, i) => `<button type="button" class="thumb" data-src="${esc(src)}" data-alt="${esc(altFor(p, src, i, photos.length))}" aria-label="Show photo ${i + 1} of ${photos.length}" aria-current="${i === 0 ? "true" : "false"}"><img src="${esc(src)}" alt=""></button>`).join("")}</div>
           </div>`
-        : `<div class="photo"><img class="shot" src="${esc(photos[0])}" alt="${esc(altFor(name, photos[0], 0, 1))}" width="800" height="600"></div>`;
+        : `<div class="photo"><img class="shot" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, 1))}" width="1200" height="800"></div>`;
     const badge = marked ? '<p class="badge">Example – replace me</p>' : "";
     const label = !marked && p.label ? `<p class="placard">${esc(p.label)}</p>` : "";
     return `<article class="card${gallery ? " has-gallery" : ""}">
