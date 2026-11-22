@@ -3,18 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Nolo Prints | Phone Stands &amp; Engineering Builds</title>
-<meta name="description" content="Custom 3D printing and engineering builds from the Florida Gulf Coast. The GravityAssist Phone Stand holds a phone in landscape. Designed and printed by Nolan.">
+<title>3D Printed Phone Stand | Nolo Prints</title>
+<meta name="description" content="Nolo Prints GravityAssist Phone Stand: a 3D printed phone stand that holds a phone in landscape. Designed and printed by Nolan.">
 <link rel="canonical" href="https://nolan681232.github.io/nolans-picks/prints/">
-<meta property="og:title" content="Nolo Prints | Phone Stands &amp; Engineering Builds">
-<meta property="og:description" content="Custom 3D printing and engineering builds from the Florida Gulf Coast, including the GravityAssist Phone Stand.">
+<meta property="og:title" content="3D Printed Phone Stand | Nolo Prints">
+<meta property="og:description" content="Nolo Prints GravityAssist Phone Stand: a 3D printed phone stand that holds a phone in landscape. Designed and printed by Nolan.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nolan681232.github.io/nolans-picks/prints/">
 <meta property="og:image" content="https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-1.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="800">
+<meta property="og:image:alt" content="GravityAssist Phone Stand holding a phone in landscape">
 <meta property="og:site_name" content="Nolo Prints">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Nolo Prints | Phone Stands &amp; Engineering Builds">
-<meta name="twitter:description" content="Custom 3D printing and engineering builds from the Florida Gulf Coast, including the GravityAssist Phone Stand.">
+<meta name="twitter:title" content="3D Printed Phone Stand | Nolo Prints">
+<meta name="twitter:description" content="Nolo Prints GravityAssist Phone Stand: a 3D printed phone stand that holds a phone in landscape. Designed and printed by Nolan.">
 <meta name="twitter:image" content="https://nolan681232.github.io/nolans-picks/prints/img/gravityassist-1.jpg">
 <meta name="theme-color" content="#071422">
 <link rel="icon" href="img/about.png">
@@ -27,7 +30,7 @@
       "@type": "WebSite",
       "name": "Nolo Prints",
       "url": "https://nolan681232.github.io/nolans-picks/prints/",
-      "description": "Custom 3D printing and engineering builds from the Florida Gulf Coast.",
+      "description": "3D printed phone stands and engineering builds from the Florida Gulf Coast, including the GravityAssist Phone Stand.",
       "publisher": {
         "@type": "Person",
         "name": "Nolan",
@@ -82,11 +85,11 @@
       <p class="eyebrow">Pilot in training · Florida Gulf Coast</p>
       <h1>Nolo Prints</h1>
       <p class="tagline">Custom 3D-printed builds by a future aerospace engineer</p>
-      <p class="note">Functional engineering builds from the Florida Gulf Coast, including a landscape phone stand.</p>
+      <p class="note">Functional engineering builds from the Florida Gulf Coast, including the GravityAssist 3D printed phone stand.</p>
     </header>
     <section aria-label="Prints">
       <div class="grid" id="product-grid"></div>
-      <noscript><p class="empty">JavaScript is off, so the print list is hidden. You can still order from the <a href="order.html">order page</a>.</p></noscript>
+      <noscript><p class="empty">JavaScript is off, so the photo gallery is hidden. The GravityAssist Phone Stand is a 3D printed phone stand. You can still <a href="order.html?item=GravityAssist%20Phone%20Stand">order the GravityAssist Phone Stand</a>.</p></noscript>
     </section>
   </div>
 </main>
@@ -94,7 +97,7 @@
   <div class="wrap">
     <p class="footer-links">
       <a href="../">Nolan's Picks</a>
-      <a href="https://facebook.com/Thepilotnolan" target="_blank" rel="noopener noreferrer">Facebook<span class="sr-only"> (opens in a new tab)</span></a>
+      <a href="https://facebook.com/Thepilotnolan" target="_blank" rel="noopener noreferrer">Nolan on Facebook<span class="sr-only"> (opens in a new tab)</span></a>
     </p>
     <p>&copy; 2026 Nolo Prints</p>
   </div>
@@ -136,14 +139,29 @@
     const photos = photosOf(p);
     const marked = isExample(p);
     const gallery = photos.length > 1;
+    const IMAGE_SIZE = {
+      "img/gravityassist-1.jpg": [1200, 800],
+      "img/gravityassist-2.jpg": [1200, 800],
+      "img/gravityassist-3.jpg": [900, 1200],
+      "img/gravityassist-4.jpg": [900, 1200],
+      "img/gravityassist-5.jpg": [900, 1200],
+      "img/gravityassist-6.jpg": [900, 1200]
+    };
+    const dims = src => IMAGE_SIZE[String(src || "").split("?")[0]] || [1200, 800];
+    const mainDim = photos.length ? dims(photos[0]) : [1200, 800];
+    const thumbBtn = (src, i) => {
+      const d = dims(src);
+      const alt = altFor(p, src, i, photos.length);
+      return `<button type="button" class="thumb" data-src="${esc(src)}" data-alt="${esc(alt)}" aria-label="Show ${esc(name)} photo ${i + 1} of ${photos.length}" aria-current="${i === 0 ? "true" : "false"}"><img src="${esc(src)}" alt="${esc(alt)}" width="${d[0]}" height="${d[1]}" loading="lazy" decoding="async"></button>`;
+    };
     const media = photos.length === 0
       ? `<div class="photo" role="img" aria-label="Neutral placeholder, not a product photo"></div>`
       : gallery
         ? `<div class="gallery">
-            <img class="gallery-main" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, photos.length))}" width="1200" height="800">
-            <div class="thumbs">${photos.map((src, i) => `<button type="button" class="thumb" data-src="${esc(src)}" data-alt="${esc(altFor(p, src, i, photos.length))}" aria-label="Show photo ${i + 1} of ${photos.length}" aria-current="${i === 0 ? "true" : "false"}"><img src="${esc(src)}" alt=""></button>`).join("")}</div>
+            <img class="gallery-main" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, photos.length))}" width="${mainDim[0]}" height="${mainDim[1]}">
+            <div class="thumbs">${photos.map(thumbBtn).join("")}</div>
           </div>`
-        : `<div class="photo"><img class="shot" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, 1))}" width="1200" height="800"></div>`;
+        : `<div class="photo"><img class="shot" src="${esc(photos[0])}" alt="${esc(altFor(p, photos[0], 0, 1))}" width="${mainDim[0]}" height="${mainDim[1]}"></div>`;
     const badge = marked ? '<p class="badge">Example – replace me</p>' : "";
     const marks = [
       !marked && p.label ? `<p class="placard">${esc(p.label)}</p>` : "",
