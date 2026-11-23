@@ -933,7 +933,9 @@ h1.brand a:hover,h1.brand a:focus{color:inherit}
 .star-rating input{width:1.05rem;height:1.05rem;accent-color:var(--deep)}
 button.btn{border:0;cursor:pointer;font-family:inherit;font-size:1rem;line-height:1.5}
 .review-form .btn{justify-self:start}
-.stars-out{font-weight:900;letter-spacing:2px;color:var(--deep)}
+.stars-out{font-weight:900;letter-spacing:2px;color:var(--deep);margin:8px 0 0}
+.review-date{margin-top:12px;font-size:.9rem;font-weight:700;color:var(--muted)}
+.review-note{margin:14px 0 0;max-width:640px;font-weight:700;color:var(--muted)}
 @media (max-width:520px){.review-form .btn{width:100%}}
 </style>
 </head>
@@ -1088,12 +1090,12 @@ button.btn{border:0;cursor:pointer;font-family:inherit;font-size:1rem;line-heigh
       <div class="section-head">
         <div class="eyebrow">Reviews</div>
         <h2 id="reviews-heading">⭐ Reviews</h2>
-        <p class="sub">Nolan's notes on products he has used, and a place to send your own.</p>
+        <p class="sub">Visitor reviews of products and Nolo Prints. Leave yours with the form below.</p>
       </div>
       <div class="group">
-        <h3>Nolan's Reviews</h3>
+        <h3>What visitors are saying</h3>
         <div class="grid" id="review-grid"></div>
-        <p class="empty-note" id="reviews-empty">Nolan's reviews coming soon!</p>
+        <p class="empty-note" id="reviews-empty">No visitor reviews yet. Be the first to leave one below! ⭐</p>
       </div>
       <div class="group">
         <h3>Leave a Review</h3>
@@ -1126,6 +1128,7 @@ button.btn{border:0;cursor:pointer;font-family:inherit;font-size:1rem;line-heigh
           </label>
           <button class="btn" type="submit">Send review</button>
         </form>
+        <p class="review-note">Reviews show up here after Nolan approves them.</p>
       </div>
     </section>
 
@@ -1151,6 +1154,90 @@ button.btn{border:0;cursor:pointer;font-family:inherit;font-size:1rem;line-heigh
 </div>
 
 <script>
+/* =========================================================
+   VISITOR REVIEWS
+   Approved reviews from visitors. Leave VISITOR_REVIEWS
+   empty until Nolan approves a real one. Do not invent
+   ratings or review text, and do not paste Amazon ratings
+   or Amazon review text.
+   Each entry:
+     { name, product, stars (1-5), text, date }
+   Example (not a real review — the card shows the first name only):
+     { name: "Alex Rivera", product: "Product name", stars: 5, text: "Short review.", date: "2026-01-15" }
+   ========================================================= */
+const VISITOR_REVIEWS = [];
+(function () {
+  const grid = document.getElementById("review-grid");
+  const empty = document.getElementById("reviews-empty");
+  if (!grid) return;
+  const firstName = name => {
+    const trimmed = String(name == null ? "" : name).trim();
+    return trimmed ? trimmed.split(/\s+/)[0] : "";
+  };
+  const items = (Array.isArray(VISITOR_REVIEWS) ? VISITOR_REVIEWS : []).filter(r => {
+    return r && firstName(r.name) && String(r.text == null ? "" : r.text).trim();
+  });
+  if (!items.length) {
+    if (empty) empty.hidden = false;
+    return;
+  }
+  if (empty) empty.hidden = true;
+  const frag = document.createDocumentFragment();
+  items.forEach(r => {
+    const card = document.createElement("article");
+    card.className = "card";
+
+    const nameEl = document.createElement("h3");
+    nameEl.className = "name";
+    nameEl.textContent = firstName(r.name);
+    card.appendChild(nameEl);
+
+    const product = String(r.product == null ? "" : r.product).trim();
+    if (product) {
+      const productEl = document.createElement("p");
+      productEl.className = "for-line";
+      productEl.textContent = product;
+      card.appendChild(productEl);
+    }
+
+    const stars = Number(r.stars);
+    if (Number.isInteger(stars) && stars >= 1 && stars <= 5) {
+      const starsEl = document.createElement("p");
+      starsEl.className = "stars-out";
+      const label = stars + " out of 5 stars";
+      starsEl.setAttribute("role", "img");
+      starsEl.setAttribute("aria-label", label);
+      const marks = document.createElement("span");
+      marks.setAttribute("aria-hidden", "true");
+      marks.textContent = "★".repeat(stars) + "☆".repeat(5 - stars);
+      const sr = document.createElement("span");
+      sr.className = "sr-only";
+      sr.textContent = " " + label;
+      starsEl.append(marks, sr);
+      card.appendChild(starsEl);
+    }
+
+    const textEl = document.createElement("p");
+    textEl.className = "tip";
+    textEl.textContent = String(r.text).trim();
+    card.appendChild(textEl);
+
+    const date = String(r.date == null ? "" : r.date).trim();
+    if (date) {
+      const dateEl = document.createElement("p");
+      dateEl.className = "review-date";
+      const time = document.createElement("time");
+      if (/^\d{4}-\d{2}-\d{2}$/.test(date)) time.dateTime = date;
+      time.textContent = date;
+      dateEl.appendChild(time);
+      card.appendChild(dateEl);
+    }
+
+    frag.appendChild(card);
+  });
+  grid.replaceChildren(frag);
+})();
+
 function seeReviewsLink(url, name) {
   const match = String(url || "").match(/\/dp\/([A-Za-z0-9]{10})(?:[/?#]|$)/);
   if (!match) return "";
@@ -1803,43 +1890,6 @@ const SHOP = {
       ${seeReviewsLink(p.url, p.name)}
     </article>`;
   document.querySelectorAll("[data-shop]").forEach(el => { el.innerHTML = (SHOP[el.dataset.shop] || []).map(card).join(""); });
-})();
-
-/* =========================================================
-   NOLAN'S REVIEWS — leave REVIEWS empty until there is a
-   real review to add. Do not invent ratings or review text.
-   Sample, not a review:
-     { name: "Product name", url: "https://www.amazon.com/dp/ASIN?tag=verdantlink0d-20", stars: 5, text: "Short review." }
-   ========================================================= */
-const REVIEWS = [];
-(function () {
-  const grid = document.getElementById("review-grid");
-  const empty = document.getElementById("reviews-empty");
-  if (!grid) return;
-  const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-  const items = Array.isArray(REVIEWS) ? REVIEWS.filter(r => r && r.name && r.text) : [];
-  if (!items.length) return;
-  if (empty) empty.hidden = true;
-  const starsFor = n => {
-    const v = Number(n);
-    if (!Number.isInteger(v) || v < 1 || v > 5) return "";
-    const label = v + " out of 5 stars";
-    return `<p class="stars-out" role="img" aria-label="${esc(label)}">${"★".repeat(v)}${"☆".repeat(5 - v)}<span class="sr-only"> ${esc(label)}</span></p>`;
-  };
-  const nameHtml = r => {
-    if (!r.url) return esc(r.name);
-    const affiliate = /amazon\.com|link\.amazon/i.test(String(r.url));
-    const rel = affiliate ? ' rel="sponsored noopener"' : "";
-    const blank = affiliate ? ' target="_blank"' : "";
-    const extra = affiliate ? '<span class="sr-only"> (opens in a new tab)</span>' : "";
-    return `<a href="${esc(r.url)}"${blank}${rel}>${esc(r.name)}${extra}</a>`;
-  };
-  grid.innerHTML = items.map(r => `
-    <article class="card">
-      ${starsFor(r.stars)}
-      <h3 class="name">${nameHtml(r)}</h3>
-      <p class="tip">${esc(r.text)}</p>
-    </article>`).join("");
 })();
 
 /* Tabs: show one section at a time. Without JavaScript every section shows. */
