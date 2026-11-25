@@ -1,9 +1,11 @@
+import { wishVector } from "./controls.js";
+
 export function createInput(canvas) {
   const keys = new Set();
   const state = {
     keys,
     yaw: Math.PI,
-    pitch: 0.28,
+    pitch: 0.08,
     locked: false,
     jump: false,
     dash: false,
@@ -32,10 +34,11 @@ export function createInput(canvas) {
     state.locked = document.pointerLockElement === canvas;
   });
   document.addEventListener("mousemove", (e) => {
+    // Pointer lock reports movement with no button held. Do not require e.buttons.
     if (!state.locked) return;
     state.yaw -= e.movementX * 0.0022;
     state.pitch -= e.movementY * 0.0018;
-    state.pitch = Math.max(-0.35, Math.min(0.85, state.pitch));
+    state.pitch = Math.max(-0.95, Math.min(1.05, state.pitch));
   });
   canvas.addEventListener("click", () => {
     if (canvas.dataset.play === "1" && document.pointerLockElement !== canvas) {
@@ -47,17 +50,10 @@ export function createInput(canvas) {
 }
 
 export function wishDir(input) {
-  const yaw = input.yaw;
-  const lookX = -Math.sin(yaw);
-  const lookZ = -Math.cos(yaw);
-  const rightX = -Math.cos(yaw);
-  const rightZ = Math.sin(yaw);
-  let x = 0;
-  let z = 0;
-  const k = input.keys;
-  if (k.has("KeyW") || k.has("ArrowUp")) { x += lookX; z += lookZ; }
-  if (k.has("KeyS") || k.has("ArrowDown")) { x -= lookX; z -= lookZ; }
-  if (k.has("KeyD") || k.has("ArrowRight")) { x += rightX; z += rightZ; }
-  if (k.has("KeyA") || k.has("ArrowLeft")) { x -= rightX; z -= rightZ; }
-  return { x, z };
+  return wishVector(input.yaw, {
+    forward: input.keys.has("KeyW") || input.keys.has("ArrowUp"),
+    back: input.keys.has("KeyS") || input.keys.has("ArrowDown"),
+    left: input.keys.has("KeyA") || input.keys.has("ArrowLeft"),
+    right: input.keys.has("KeyD") || input.keys.has("ArrowRight"),
+  });
 }

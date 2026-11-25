@@ -175,8 +175,11 @@ assert.equal(zoneAt(0, 0), "castle");
 {
   const fwd = stickToWorld(0, 1, 0, -1);
   assert.ok(Math.abs(fwd.x) < 1e-6 && Math.abs(fwd.z - 1) < 1e-6);
+  // Facing +Z, pushing the stick right is screen-right, which is -X.
   const right = stickToWorld(0, 1, 1, 0);
-  assert.ok(Math.abs(right.x - 1) < 1e-6 && Math.abs(right.z) < 1e-6);
+  assert.ok(Math.abs(right.x + 1) < 1e-6 && Math.abs(right.z) < 1e-6);
+  const rightSouth = stickToWorld(0, -1, 1, 0);
+  assert.ok(Math.abs(rightSouth.x - 1) < 1e-6 && Math.abs(rightSouth.z) < 1e-6);
   const stopped = deadstick(0.05, -0.05);
   assert.equal(stopped.x, 0);
   assert.equal(stopped.y, 0);
