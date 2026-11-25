@@ -98,6 +98,7 @@ export function createActor(THREE, team, name) {
     leftArm,
     rightArm,
     head,
+    label: sprite,
     team,
     update(time, speed, yaw) {
       const swing = Math.sin(time * 10) * Math.min(0.7, speed * 0.12);

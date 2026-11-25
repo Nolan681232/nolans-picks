@@ -22,15 +22,16 @@
   <p id="you-line"></p>
   <p id="callout"></p>
   <p id="capture">Click the castle to capture the mouse</p>
-  <p id="controls">WASD move · mouse look · space jump · shift dash · esc releases the mouse</p>
+  <p id="controls">WASD move · mouse look · space jump · shift dash · esc releases the mouse · Enter VR for a headset</p>
   <div id="hud-actions">
+    <button type="button" class="btn-vr" id="btn-vr-hud">Enter VR</button>
     <button type="button" id="btn-mute">Sound on</button>
     <button type="button" id="btn-leave">Leave</button>
   </div>
 </div>
 <div id="overlay">
   <section id="screen-home" class="panel">
-    <p class="kicker">Desktop · keyboard and mouse</p>
+    <p class="kicker">Desktop keyboard, or a Quest headset</p>
     <h1>Towers</h1>
     <p class="lede">A cardboard castle. Guards hold the yard. Zombies want the roof.</p>
     <label class="field">Your name
@@ -53,8 +54,28 @@
         <li>Scores never go below 0. Inside the castle, the guard’s tag wins if both touch at once.</li>
         <li>The host picks the ending: first to N points (default 3), or highest score when the timer runs out. A tied timer is a draw.</li>
         <li>Side picks are kept when the teams can be even. If too many people pick the same side, extras are moved at random.</li>
+        <li>In VR, touching someone with a controller tags them. The same match works with keyboard players.</li>
       </ul>
     </details>
+    <h2>VR</h2>
+    <button type="button" class="btn-vr" id="btn-vr">Enter VR</button>
+    <p id="vr-support" class="hint">Checking this browser for a headset…</p>
+    <div class="vr-options">
+      <label class="field">Turn
+        <select id="vr-turn">
+          <option value="snap">Snap turn</option>
+          <option value="smooth">Smooth turn</option>
+        </select>
+      </label>
+      <label class="field">Snap angle
+        <select id="vr-angle">
+          <option value="30">30°</option>
+          <option value="45" selected>45°</option>
+          <option value="90">90°</option>
+        </select>
+      </label>
+      <label class="check"><input id="vr-vignette" type="checkbox" checked> Vignette while moving</label>
+    </div>
   </section>
 
   <section id="screen-create" class="panel hidden">

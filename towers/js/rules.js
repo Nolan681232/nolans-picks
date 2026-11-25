@@ -105,10 +105,30 @@ export function assignTeams(players, rng = Math.random) {
 }
 
 export function touching(a, b) {
+  if (bodyTouch(a, b)) return true;
+  if (handsTouch(a, b) || handsTouch(b, a)) return true;
+  return false;
+}
+
+function bodyTouch(a, b) {
   const dx = a.x - b.x;
   const dz = a.z - b.z;
   const dy = a.y - b.y;
   return dx * dx + dz * dz <= TAG_R * TAG_R && Math.abs(dy) <= TAG_H;
+}
+
+// Controller tips. A reach counts when a hand is beside the other player's body.
+function handsTouch(attacker, target) {
+  const hands = attacker && attacker.hands;
+  if (!hands || !hands.length) return false;
+  for (const h of hands) {
+    if (!h) continue;
+    const dx = h.x - target.x;
+    const dz = h.z - target.z;
+    const dy = h.y - (target.y + 0.9);
+    if (dx * dx + dz * dz <= 0.62 * 0.62 && Math.abs(dy) <= 1.15) return true;
+  }
+  return false;
 }
 
 export function guardOutOfBounds(p, now) {

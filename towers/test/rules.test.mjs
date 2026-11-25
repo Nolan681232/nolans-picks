@@ -9,6 +9,7 @@ import {
   onGoal,
   zoneAt,
 } from "../js/course.js";
+import { deadstick, stickToWorld } from "../js/vrmath.js";
 import {
   applyDelta,
   assignTeams,
@@ -140,6 +141,14 @@ assert.equal(zoneAt(0, 0), "castle");
 }
 
 {
+  const guard = { id: "g", team: "guards", x: 0, y: 1, z: 0, invulnUntil: 0, hands: [{ x: 4.2, y: 1.1, z: 0.2 }] };
+  const zombie = { id: "z", team: "zombies", x: 4.5, y: 0, z: 0, invulnUntil: 0 };
+  const poked = resolveTouch(guard, zombie, 0);
+  assert.equal(poked.type, "guard-tag");
+  assert.equal(resolveTouch({ ...guard, hands: null }, zombie, 0), null);
+}
+
+{
   const guard = { id: "g", team: "guards", x: 0, y: 1, z: -10, invulnUntil: 0 };
   const zombie = { id: "z", team: "zombies", x: 0.4, y: 1, z: -10.2, invulnUntil: 0 };
   const inside = resolveTouch(guard, zombie, 0);
@@ -161,6 +170,16 @@ assert.equal(zoneAt(0, 0), "castle");
   assert.equal(guardOutOfBounds(guard, 50), false);
   const zombie = createBody({ id: "z", team: "zombies", x: -2, y: DECK_Y, z: -2, grounded: true });
   assert.equal(zombieReachedGoal(zombie, 0), true);
+}
+
+{
+  const fwd = stickToWorld(0, 1, 0, -1);
+  assert.ok(Math.abs(fwd.x) < 1e-6 && Math.abs(fwd.z - 1) < 1e-6);
+  const right = stickToWorld(0, 1, 1, 0);
+  assert.ok(Math.abs(right.x - 1) < 1e-6 && Math.abs(right.z) < 1e-6);
+  const stopped = deadstick(0.05, -0.05);
+  assert.equal(stopped.x, 0);
+  assert.equal(stopped.y, 0);
 }
 
 console.log("rules tests ok");

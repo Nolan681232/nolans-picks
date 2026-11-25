@@ -28,6 +28,7 @@ import {
   zombieReachedGoal,
 } from "./rules.js";
 import { createTextures } from "./textures.js";
+import { createVR } from "./vr.js";
 import { createWorld } from "./world.js";
 
 const canvas = document.querySelector("#view");
@@ -49,6 +50,17 @@ const world = createWorld(THREE, scene, textures);
 const input = createInput(canvas);
 const audio = createAudio();
 const net = createNetwork();
+let vr;
+vr = createVR({
+  THREE,
+  renderer,
+  scene,
+  camera,
+  onStart() {
+    const me = session?.bodies.get(session.selfId);
+    if (me) vr.face(me.yaw || input.yaw);
+  },
+});
 
 let myName = loadName();
 let pref = "either";
@@ -239,6 +251,7 @@ function enterPlay() {
   canvas.dataset.play = "1";
   if (document.activeElement && document.activeElement !== canvas) document.activeElement.blur();
   $("#you-line").textContent = `You are ${teamName(session.teams[session.selfId] || "guards")} · ${myName}`;
+  vr.setTeam(session.teams[session.selfId]);
   updateHud();
 }
 
@@ -432,7 +445,10 @@ function respawn(id, team, now) {
   body.invulnUntil = now + 2500;
   body.holdUntil = now + 600;
   body.wp = 0;
-  if (body.local) input.yaw = spot.yaw;
+  if (body.local) {
+    input.yaw = spot.yaw;
+    vr.face(spot.yaw);
+  }
   if (session.online && session.isHost) {
     sendEvent(gameApi, {
       kind: "spawn",
@@ -569,10 +585,12 @@ function syncMesh(body, dt, time) {
   body.prev = { x: body.x, z: body.z };
   body.actor.update(time, speed, body.yaw);
   const blinking = body.invulnUntil > Date.now();
-  group.visible = !blinking || Math.floor(time * 10) % 2 === 0;
+  const hiddenSelf = vr.active && body.local;
+  group.visible = !hiddenSelf && (!blinking || Math.floor(time * 10) % 2 === 0);
 }
 
 function updateCamera(dt) {
+  if (vr.active) return;
   const me = session.bodies.get(session.selfId);
   if (!me) return;
   const yaw = input.yaw;
@@ -617,18 +635,32 @@ function step(dt, now, time) {
   if (!session || (session.phase !== "play" && session.phase !== "end")) return;
   const me = session.bodies.get(session.selfId);
   if (me && session.phase === "play") {
-    const dir = wishDir(input);
-    if (input.dash && me.dash <= 0 && me.dashCd <= 0) {
+    const stick = vr.active ? vr.movement() : null;
+    const dir = stick ? { x: stick.x, z: stick.z } : wishDir(input);
+    if (stick) {
+      const keys = wishDir(input);
+      dir.x += keys.x;
+      dir.z += keys.z;
+    }
+    const dashPressed = input.dash || !!stick?.dash;
+    if (dashPressed && me.dash <= 0 && me.dashCd <= 0) {
       me.dash = 0.18;
       me.dashCd = 0.85;
     }
     input.dash = false;
     if (me.dashCd > 0) me.dashCd -= dt;
-    const jump = input.jump;
+    const jump = input.jump || !!stick?.jump;
     input.jump = false;
     if (jump && me.grounded) audio.jump();
     moveBody(me, dt, dir.x, dir.z, jump && me.grounded, { speed: 7.6 });
-    me.yaw = input.yaw;
+    if (vr.active) {
+      me.yaw = vr.lookYaw();
+      input.yaw = me.yaw;
+      me.hands = vr.hands;
+    } else {
+      me.yaw = input.yaw;
+      me.hands = null;
+    }
   } else {
     input.jump = false;
     input.dash = false;
@@ -649,7 +681,9 @@ function step(dt, now, time) {
     session.snapAcc += dt;
     if (session.snapAcc >= 1 / 15 && me) {
       session.snapAcc = 0;
-      sendSnap(gameApi, { x: round(me.x), y: round(me.y), z: round(me.z), yaw: round(me.yaw), g: me.grounded ? 1 : 0 });
+      const snap = { x: round(me.x), y: round(me.y), z: round(me.z), yaw: round(me.yaw), g: me.grounded ? 1 : 0 };
+      if (vr.active && vr.hands.length) snap.h = vr.hands.map((p) => [round(p.x), round(p.y), round(p.z)]);
+      sendSnap(gameApi, snap);
     }
     if (session.isHost) {
       session.botAcc += dt;
@@ -755,6 +789,7 @@ function onSnap(id, data) {
   body.z = data.z;
   body.yaw = data.yaw;
   body.grounded = !!data.g;
+  body.hands = Array.isArray(data.h) ? data.h.map((p) => ({ x: p[0], y: p[1], z: p[2] })) : null;
 }
 
 function onBots(id, data) {
@@ -1025,8 +1060,11 @@ function loop(stamp) {
   let raw = Math.min(0.2, (now - loop.last) / 1000);
   loop.last = now;
   const time = now / 1000;
-  if (!session) attract(time);
-  else {
+  const frameDt = Math.min(0.05, Math.max(raw, 0.016));
+  if (vr.active) vr.poll(frameDt);
+  if (!session) {
+    if (!vr.active) attract(time);
+  } else {
     // Catch up a few slices after a hitch so the match doesn't go into slow motion.
     const slice = 1 / 60;
     let n = 0;
@@ -1036,15 +1074,20 @@ function loop(stamp) {
       n += 1;
     }
   }
+  if (vr.active) {
+    const body = session?.bodies.get(session.selfId) || null;
+    vr.follow(frameDt, session ? body : null);
+  }
   world.update(time);
-  if (!document.hidden) renderer.render(scene, camera);
+  if (vr.active || !document.hidden) renderer.render(scene, camera);
   if (!window.__towers) window.__towers = {};
   window.__towers.ready = true;
   window.__towers.playing = Boolean(session && session.phase === "play");
   window.__towers.scores = session ? { ...session.scores } : null;
   const me = session?.bodies.get(session.selfId);
   window.__towers.me = me ? { x: me.x, y: me.y, z: me.z, team: me.team } : null;
-  schedule();
+  window.__towers.vr = vr.active;
+  if (!vr.driving) schedule();
 }
 
 function bind() {
@@ -1155,6 +1198,11 @@ function boot() {
     if (listed) publishListing();
   }, 2000);
   if (params.has("play")) startPractice(normalizeSettings({ mode: "points", pointsToWin: 3, minutes: 3, useBots: true }));
+  window.__towersFrame = loop;
+  window.__towersResume = () => {
+    if (!vr.driving) schedule();
+  };
+  vr.boot();
   window.addEventListener("resize", () => {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
