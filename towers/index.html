@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Towers</title>
+<meta name="description" content="Towers — a cardboard castle game. Guards versus zombies. First to the top, or first to the score.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect fill='%23e2b56a' width='64' height='64' rx='8'/%3E%3Cpath fill='%23c47a3a' d='M14 50V28h8v8h6v-8h8v8h6v-8h8v22z'/%3E%3Cpath fill='%23f2c14e' d='M30 18h4v10h-4z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="view" aria-label="Towers castle"></canvas>
+<div id="hud" class="hidden">
+  <div id="scoreboard">
+    <div class="team guards"><span>Guards</span><strong id="score-g">0</strong></div>
+    <div class="mid"><strong id="clock">First to 3</strong><span id="mode-line">Points game</span></div>
+    <div class="team zombies"><span>Zombies</span><strong id="score-z">0</strong></div>
+  </div>
+  <p id="you-line"></p>
+  <p id="callout"></p>
+  <p id="capture">Click the castle to capture the mouse</p>
+  <p id="controls">WASD move · mouse look · space jump · shift dash · esc releases the mouse</p>
+  <div id="hud-actions">
+    <button type="button" id="btn-mute">Sound on</button>
+    <button type="button" id="btn-leave">Leave</button>
+  </div>
+</div>
+<div id="overlay">
+  <section id="screen-home" class="panel">
+    <p class="kicker">Desktop · keyboard and mouse</p>
+    <h1>Towers</h1>
+    <p class="lede">A cardboard castle. Guards hold the yard. Zombies want the roof.</p>
+    <label class="field">Your name
+      <input id="name-input" maxlength="16" autocomplete="nickname">
+    </label>
+    <div class="row">
+      <button type="button" id="btn-to-create" class="primary">Create game</button>
+      <button type="button" id="btn-practice">Practice with bots</button>
+    </div>
+    <h2>Games in progress</h2>
+    <p id="lobby-status" data-status="connecting">Connecting to the public lobby…</p>
+    <ul id="game-list"></ul>
+    <details>
+      <summary>Rules</summary>
+      <ul class="rules">
+        <li>Zombies score 1 when a zombie stands on the top platform, then they respawn outside.</li>
+        <li>If a guard touches a zombie inside the castle, guards +1 and zombies −1. That zombie goes back outside. A guard on the roof can stop a score this way.</li>
+        <li>If a zombie touches a guard outside the castle, guards −1 and that guard is sent back inside.</li>
+        <li>If a guard walks onto zombie land, guards −1 and they respawn inside. A short cooldown stops the score from draining twice.</li>
+        <li>Scores never go below 0. Inside the castle, the guard’s tag wins if both touch at once.</li>
+        <li>The host picks the ending: first to N points (default 3), or highest score when the timer runs out. A tied timer is a draw.</li>
+        <li>Side picks are kept when the teams can be even. If too many people pick the same side, extras are moved at random.</li>
+      </ul>
+    </details>
+  </section>
+
+  <section id="screen-create" class="panel hidden">
+    <button type="button" id="btn-back" class="texty">← Back</button>
+    <h1>New game</h1>
+    <p class="lede">You are the host. This choice is what everyone plays.</p>
+    <div class="modes" role="group" aria-label="Win condition">
+      <button type="button" id="mode-points" class="on">Points</button>
+      <button type="button" id="mode-timer">Timer</button>
+    </div>
+    <div id="points-opts">
+      <label class="field">First team to
+        <input id="points-input" type="number" min="1" max="20" value="3">
+      </label>
+      <div class="presets">
+        <button type="button" data-points="3">3</button>
+        <button type="button" data-points="5">5</button>
+        <button type="button" data-points="10">10</button>
+      </div>
+    </div>
+    <div id="timer-opts" class="hidden">
+      <label class="field">Minutes
+        <input id="minutes-input" type="number" min="1" max="30" value="3">
+      </label>
+      <div class="presets">
+        <button type="button" data-min="2">2 min</button>
+        <button type="button" data-min="3">3 min</button>
+        <button type="button" data-min="5">5 min</button>
+        <button type="button" data-min="10">10 min</button>
+      </div>
+      <p class="hint">When time’s up, the higher score wins. Equal scores are a tie.</p>
+    </div>
+    <label class="check"><input id="bots" type="checkbox" checked> Fill empty spots with bots</label>
+    <div class="row">
+      <button type="button" id="btn-host" class="primary">Create online game</button>
+      <button type="button" id="btn-practice-setup">Practice this setup</button>
+    </div>
+  </section>
+
+  <section id="screen-room" class="panel hidden">
+    <p class="kicker">Room code</p>
+    <p id="room-code">····</p>
+    <p id="room-mode"></p>
+    <p id="room-bots" class="hint"></p>
+    <p id="room-status"></p>
+    <h2>Players</h2>
+    <ul id="room-players"></ul>
+    <p class="hint">Pick a side. If the teams would be lopsided, someone gets moved at random so the sides match.</p>
+    <div class="modes" role="group" aria-label="Your side">
+      <button type="button" id="side-guards">Guards</button>
+      <button type="button" id="side-zombies">Zombies</button>
+      <button type="button" id="side-either" class="on">Either</button>
+    </div>
+    <div class="row">
+      <button type="button" id="room-start" class="primary">Start game</button>
+      <button type="button" id="room-leave">Leave</button>
+    </div>
+    <p id="room-wait" class="hint hidden">The host will start the match.</p>
+  </section>
+
+  <section id="screen-end" class="panel hidden">
+    <h1 id="end-title">Guards win</h1>
+    <p id="end-detail"></p>
+    <div class="row">
+      <button type="button" id="end-again" class="primary">Play again</button>
+      <button type="button" id="end-leave">Leave</button>
+    </div>
+  </section>
+</div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
