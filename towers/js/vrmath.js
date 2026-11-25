@@ -4,8 +4,8 @@ export function stickToWorld(forwardX, forwardZ, stickX, stickY) {
   const len = Math.hypot(forwardX, forwardZ) || 1;
   const fx = forwardX / len;
   const fz = forwardZ / len;
-  const rx = fz;
-  const rz = -fx;
+  const rx = -fz;
+  const rz = fx;
   const fwd = -stickY;
   return {
     x: fx * fwd + rx * stickX,

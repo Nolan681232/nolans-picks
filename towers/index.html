@@ -10,6 +10,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;700&family=Nunito:wght@600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://unpkg.com/three@0.170.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.170.0/examples/jsm/"
+  }
+}
+</script>
 </head>
 <body>
 <canvas id="view" aria-label="Towers castle"></canvas>
@@ -21,8 +29,8 @@
   </div>
   <p id="you-line"></p>
   <p id="callout"></p>
-  <p id="capture">Click the castle to capture the mouse</p>
-  <p id="controls">WASD move · mouse look · space jump · shift dash · esc releases the mouse · Enter VR for a headset</p>
+  <p id="capture">Click to play</p>
+  <p id="controls">Click once, then move the mouse to look · WASD move · space jump · shift dash · Esc releases the mouse</p>
   <div id="hud-actions">
     <button type="button" class="btn-vr" id="btn-vr-hud">Enter VR</button>
     <button type="button" id="btn-mute">Sound on</button>
@@ -36,6 +44,13 @@
     <p class="lede">A cardboard castle. Guards hold the yard. Zombies want the roof.</p>
     <label class="field">Your name
       <input id="name-input" maxlength="16" autocomplete="nickname">
+    </label>
+    <label class="field">Graphics
+      <select id="quality">
+        <option value="low">Low</option>
+        <option value="medium">Medium</option>
+        <option value="high">High</option>
+      </select>
     </label>
     <div class="row">
       <button type="button" id="btn-to-create" class="primary">Create game</button>

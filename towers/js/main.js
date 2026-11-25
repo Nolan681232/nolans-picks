@@ -1,5 +1,5 @@
-import * as THREE from "https://unpkg.com/three@0.170.0/build/three.module.js";
-import { createActor } from "./actors.js";
+import * as THREE from "three";
+import { createActor, loadCharacterLibrary } from "./actors.js";
 import { createAudio } from "./audio.js";
 import {
   CLIMB,
@@ -12,6 +12,7 @@ import {
   resetSpawns,
   zoneAt,
 } from "./course.js";
+import { cameraAim } from "./controls.js";
 import { createInput, wishDir } from "./input.js";
 import { createNetwork, sendBots, sendEvent, sendSnap } from "./net.js";
 import {
@@ -27,6 +28,8 @@ import {
   winnerFromScores,
   zombieReachedGoal,
 } from "./rules.js";
+import { createFx } from "./fx.js";
+import { initialQuality, loadLook } from "./look.js";
 import { createTextures } from "./textures.js";
 import { createVR } from "./vr.js";
 import { createWorld } from "./world.js";
@@ -35,7 +38,8 @@ const canvas = document.querySelector("#view");
 const $ = (id) => document.querySelector(id);
 
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
-renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
+const quality = initialQuality();
+renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, quality === "high" ? 1.5 : quality === "medium" ? 1.25 : 1));
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
@@ -62,6 +66,8 @@ vr = createVR({
   },
 });
 
+const fx = createFx(THREE, scene);
+let composer = null;
 let myName = loadName();
 let pref = "either";
 let gameApi = null;
@@ -395,6 +401,11 @@ function applyScores(guardsDelta, zombiesDelta) {
 function punish(type, ids, now) {
   const subject = session.bodies.get(ids.zombieId || ids.guardId);
   const other = session.bodies.get(type === "guard-tag" ? ids.guardId : ids.zombieId);
+  const burstAt = subject || other;
+  if (burstAt) {
+    const color = type === "goal" ? 0xffd35a : type === "guard-tag" ? 0x7eb6ff : 0xc8f59a;
+    fx.burst(burstAt.x, burstAt.y, burstAt.z, color);
+  }
   if (type === "guard-tag") {
     applyScores(1, -1);
     respawn(ids.zombieId, "zombies", now);
@@ -583,7 +594,7 @@ function syncMesh(body, dt, time) {
   }
   const speed = body.prev ? Math.hypot(body.x - body.prev.x, body.z - body.prev.z) / Math.max(dt, 0.001) : 0;
   body.prev = { x: body.x, z: body.z };
-  body.actor.update(time, speed, body.yaw);
+  body.actor.update(time, speed, body.yaw, dt, { grounded: body.grounded, dash: body.dash > 0 });
   const blinking = body.invulnUntil > Date.now();
   const hiddenSelf = vr.active && body.local;
   group.visible = !hiddenSelf && (!blinking || Math.floor(time * 10) % 2 === 0);
@@ -593,18 +604,16 @@ function updateCamera(dt) {
   if (vr.active) return;
   const me = session.bodies.get(session.selfId);
   if (!me) return;
-  const yaw = input.yaw;
-  const pitch = input.pitch;
-  const dist = 6.5;
-  const tx = me.x + Math.sin(yaw) * dist;
-  const ty = me.y + 2.25 + pitch * 2.4;
-  const tz = me.z + Math.cos(yaw) * dist;
+  const aim = cameraAim(input.yaw, input.pitch, me);
+  const tx = aim.position.x;
+  const ty = aim.position.y;
+  const tz = aim.position.z;
   const k = 1 - Math.exp(-8 * dt);
   camPos.x += (tx - camPos.x) * k;
   camPos.y += (ty - camPos.y) * k;
   camPos.z += (tz - camPos.z) * k;
   camera.position.copy(camPos);
-  look.set(me.x, me.y + 1.35, me.z);
+  look.set(aim.target.x, aim.target.y, aim.target.z);
   camera.lookAt(look);
 }
 
@@ -1079,7 +1088,12 @@ function loop(stamp) {
     vr.follow(frameDt, session ? body : null);
   }
   world.update(time);
-  if (vr.active || !document.hidden) renderer.render(scene, camera);
+  fx.update(frameDt);
+  if (vr.active) renderer.render(scene, camera);
+  else if (!document.hidden) {
+    if (composer) composer.render();
+    else renderer.render(scene, camera);
+  }
   if (!window.__towers) window.__towers = {};
   window.__towers.ready = true;
   window.__towers.playing = Boolean(session && session.phase === "play");
@@ -1152,6 +1166,17 @@ function bind() {
     const muted = audio.toggle();
     $("#btn-mute").textContent = muted ? "Sound off" : "Sound on";
   });
+  $("#capture").addEventListener("click", () => {
+    if (canvas.dataset.play === "1") canvas.requestPointerLock?.();
+  });
+  const qualitySelect = $("#quality");
+  if (qualitySelect) {
+    qualitySelect.value = quality;
+    qualitySelect.addEventListener("change", () => {
+      try { localStorage.setItem("towers-quality", qualitySelect.value); } catch { /* ignore */ }
+      location.reload();
+    });
+  }
   window.addEventListener("pointerdown", () => audio.unlock(), { once: true });
 }
 
@@ -1175,12 +1200,37 @@ async function leaveMatch() {
   show("#screen-home");
 }
 
-function boot() {
+async function setupBloom() {
+  const { EffectComposer } = await import("three/addons/postprocessing/EffectComposer.js");
+  const { RenderPass } = await import("three/addons/postprocessing/RenderPass.js");
+  const { UnrealBloomPass } = await import("three/addons/postprocessing/UnrealBloomPass.js");
+  composer = new EffectComposer(renderer);
+  composer.addPass(new RenderPass(scene, camera));
+  composer.addPass(new UnrealBloomPass(new THREE.Vector2(window.innerWidth, window.innerHeight), 0.14, 0.35, 0.86));
+}
+
+async function boot() {
   bind();
-  addDecor();
   show("#screen-home");
   const params = new URLSearchParams(location.search);
   if (params.get("name")) saveName(params.get("name"));
+  try {
+    const pack = await loadLook(THREE, renderer, quality);
+    world.usePbr(THREE, pack, quality);
+    if (quality === "high") await setupBloom();
+    window.__towers = window.__towers || {};
+    window.__towers.look = "pbr";
+  } catch (err) {
+    console.warn(err);
+    window.__towers = window.__towers || {};
+    window.__towers.look = "fallback";
+  }
+  try {
+    await loadCharacterLibrary();
+  } catch (err) {
+    console.warn(err);
+  }
+  addDecor();
   net.openLobby((games) => renderList(games), (status) => {
     const el = $("#lobby-status");
     const peers = status.startsWith("online:") ? Number(status.slice(7)) : 0;
@@ -1207,6 +1257,7 @@ function boot() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    composer?.setSize(window.innerWidth, window.innerHeight);
   });
   schedule();
 }

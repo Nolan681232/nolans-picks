@@ -15,10 +15,36 @@ function mat(THREE, color, map, opts = {}) {
 }
 
 function box(THREE, w, h, d, material) {
-  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), material);
-  m.castShadow = true;
-  m.receiveShadow = true;
-  return m;
+  const geo = new THREE.BoxGeometry(w, h, d);
+  const pos = geo.attributes.position;
+  const uv = geo.attributes.uv;
+  const tile = 0.8;
+  for (let i = 0; i < pos.count; i++) {
+    const x = pos.getX(i);
+    const y = pos.getY(i);
+    const z = pos.getZ(i);
+    const ax = Math.abs(x) / (w / 2 || 1);
+    const ay = Math.abs(y) / (h / 2 || 1);
+    const az = Math.abs(z) / (d / 2 || 1);
+    let u;
+    let v;
+    if (ax >= ay && ax >= az) {
+      u = (z + d / 2) / tile;
+      v = (y + h / 2) / tile;
+    } else if (ay >= az) {
+      u = (x + w / 2) / tile;
+      v = (z + d / 2) / tile;
+    } else {
+      u = (x + w / 2) / tile;
+      v = (y + h / 2) / tile;
+    }
+    uv.setXY(i, u, v);
+  }
+  geo.setAttribute("uv2", uv.clone());
+  const mesh = new THREE.Mesh(geo, material);
+  mesh.castShadow = true;
+  mesh.receiveShadow = true;
+  return mesh;
 }
 
 export function createWorld(THREE, scene, textures) {
@@ -48,22 +74,28 @@ export function createWorld(THREE, scene, textures) {
   );
   scene.add(sky);
 
+  const cardMeshes = [];
+  const groundMeshes = [];
+  const yardMeshes = [];
+
   const ground = new THREE.Mesh(
-    new THREE.CircleGeometry(78, 48),
+    tiledPlane(THREE, 150, 150, 4),
     mat(THREE, 0xffffff, textures.grass, { roughness: 1 })
   );
   ground.rotation.x = -Math.PI / 2;
   ground.receiveShadow = true;
   ground.castShadow = false;
+  groundMeshes.push(ground);
   scene.add(ground);
 
   const court = new THREE.Mesh(
-    new THREE.PlaneGeometry(INNER * 2 - 0.4, INNER * 2 - 0.4),
+    tiledPlane(THREE, INNER * 2 - 0.4, INNER * 2 - 0.4, 3),
     mat(THREE, 0xffffff, textures.court, { roughness: 1 })
   );
   court.rotation.x = -Math.PI / 2;
   court.position.y = 0.02;
   court.receiveShadow = true;
+  yardMeshes.push(court);
   scene.add(court);
 
   const path = new THREE.Mesh(
@@ -73,6 +105,7 @@ export function createWorld(THREE, scene, textures) {
   path.rotation.x = -Math.PI / 2;
   path.position.set(0, 0.03, -WALL_OUTER - 4);
   path.receiveShadow = true;
+  yardMeshes.push(path);
   scene.add(path);
 
   const card = mat(THREE, 0xffffff, textures.card);
@@ -99,6 +132,8 @@ export function createWorld(THREE, scene, textures) {
     const d = s.maxZ - s.minZ;
     const mesh = box(THREE, w, h, d, kindMat[s.kind] || card);
     mesh.position.set((s.minX + s.maxX) / 2, (s.minY + s.maxY) / 2, (s.minZ + s.maxZ) / 2);
+    mesh.userData.kind = s.kind;
+    cardMeshes.push(mesh);
     scene.add(mesh);
   }
 
@@ -107,7 +142,7 @@ export function createWorld(THREE, scene, textures) {
   lip.position.set(0, DECK_Y + 0.02, 0);
   scene.add(lip);
 
-  addCrenellations(THREE, scene, card);
+  const cren = addCrenellations(THREE, scene, card);
   addGate(THREE, scene, textures, cardDeep);
   addSigns(THREE, scene, textures);
   addTrees(THREE, scene);
@@ -123,7 +158,102 @@ export function createWorld(THREE, scene, textures) {
         c.position.x += Math.sin(time * 0.15 + i) * 0.004;
       });
     },
+    usePbr(THREE, pack, quality) {
+      const detailed = quality !== "low";
+      const card = surfaceMaterial(THREE, pack.cardboard, 0xffffff, detailed);
+      const cardDark = surfaceMaterial(THREE, pack.cardboard, 0xc9854e, detailed);
+      const cardDeep = surfaceMaterial(THREE, pack.cardboard, 0xa56b38, detailed);
+      const stairMat = surfaceMaterial(THREE, pack.cardboard, 0xe7b56e, detailed);
+      const padMat = surfaceMaterial(THREE, pack.cardboard, 0xd7a15c, detailed);
+      const towerMat = surfaceMaterial(THREE, pack.cardboard, 0xd09a58, detailed);
+      const crateMat = surfaceMaterial(THREE, pack.cardboard, 0xefd0a0, detailed);
+      const tapeMat = new THREE.MeshStandardMaterial({
+        color: 0xd8c48a,
+        roughness: 0.42,
+        metalness: 0.02,
+        transparent: true,
+        opacity: 0.92,
+      });
+      const byKind = { wall: cardDark, lintel: cardDeep, stair: stairMat, pad: padMat, tower: towerMat, crown: cardDeep, crate: crateMat };
+      for (const mesh of cardMeshes) mesh.material = byKind[mesh.userData.kind] || card;
+      for (const mesh of groundMeshes) mesh.material = surfaceMaterial(THREE, pack.grass, 0xffffff, detailed);
+      for (const mesh of yardMeshes) mesh.material = surfaceMaterial(THREE, pack.ground, 0xffffff, detailed);
+      cren.material = card;
+      if (pack.envMap) {
+        scene.environment = pack.envMap;
+        scene.environmentIntensity = quality === "high" ? 1 : 0.75;
+        if (quality === "high") {
+          scene.background = pack.envMap;
+          scene.fog = new THREE.FogExp2(0xc5d7e4, 0.012);
+          sky.visible = false;
+          for (const cloud of clouds) cloud.visible = false;
+        }
+      }
+      const shadow = quality === "high" ? 2048 : quality === "medium" ? 1024 : 512;
+      sun.shadow.mapSize.set(shadow, shadow);
+      sun.shadow.normalBias = 0.04;
+      addSeamTape(THREE, scene, tapeMat);
+    },
   };
+}
+
+function tiledPlane(THREE, width, depth, tile) {
+  const geo = new THREE.PlaneGeometry(width, depth);
+  const uv = geo.attributes.uv;
+  for (let i = 0; i < uv.count; i++) {
+    uv.setXY(i, uv.getX(i) * (width / tile), uv.getY(i) * (depth / tile));
+  }
+  geo.setAttribute("uv2", uv.clone());
+  return geo;
+}
+
+function surfaceMaterial(THREE, maps, tint, detailed) {
+  const map = maps.color;
+  map.wrapS = map.wrapT = THREE.RepeatWrapping;
+  map.colorSpace = THREE.SRGBColorSpace;
+  map.anisotropy = detailed ? 8 : 2;
+  const material = new THREE.MeshStandardMaterial({
+    color: tint,
+    map,
+    roughness: 0.92,
+    metalness: 0,
+    envMapIntensity: detailed ? 0.85 : 0.35,
+  });
+  if (detailed && maps.normal) {
+    maps.normal.wrapS = maps.normal.wrapT = THREE.RepeatWrapping;
+    maps.normal.colorSpace = THREE.NoColorSpace;
+    material.normalMap = maps.normal;
+    material.normalScale = new THREE.Vector2(1, 1);
+  }
+  if (detailed && maps.roughness) {
+    maps.roughness.wrapS = maps.roughness.wrapT = THREE.RepeatWrapping;
+    maps.roughness.colorSpace = THREE.NoColorSpace;
+    material.roughnessMap = maps.roughness;
+  }
+  if (detailed && maps.ao) {
+    maps.ao.wrapS = maps.ao.wrapT = THREE.RepeatWrapping;
+    maps.ao.colorSpace = THREE.NoColorSpace;
+    material.aoMap = maps.ao;
+    material.aoMapIntensity = 1;
+  }
+  return material;
+}
+
+function addSeamTape(THREE, scene, material) {
+  const bands = [
+    [0, 6.2, 0.12, 8.6, 0, 0],
+    [0, 11.4, 0.12, 8.6, 0, 0],
+    [4.7, 8, 0.1, 0.55, 7.2, 0],
+    [-4.7, 8, 0.1, 0.55, 7.2, 0],
+  ];
+  for (const [x, y, h, w, z, rot] of bands) {
+    const mesh = new THREE.Mesh(new THREE.BoxGeometry(w, h, 0.04), material);
+    mesh.position.set(x, y, z + COLUMN + 0.08);
+    mesh.rotation.y = rot;
+    mesh.castShadow = false;
+    mesh.receiveShadow = true;
+    scene.add(mesh);
+  }
 }
 
 function addCrenellations(THREE, scene, material) {
@@ -138,16 +268,17 @@ function addCrenellations(THREE, scene, material) {
     spots.push([-o, y, z], [o, y, z]);
   }
   const geo = new THREE.BoxGeometry(1.15, 0.72, 1.15);
-  const mesh = new THREE.InstancedMesh(geo, material, spots.length);
-  mesh.castShadow = true;
-  mesh.receiveShadow = true;
+  const cren = new THREE.InstancedMesh(geo, material, spots.length);
+  cren.castShadow = true;
+  cren.receiveShadow = true;
   const dummy = new THREE.Object3D();
   spots.forEach((p, i) => {
     dummy.position.set(p[0], p[1] + 0.36, p[2]);
     dummy.updateMatrix();
-    mesh.setMatrixAt(i, dummy.matrix);
+    cren.setMatrixAt(i, dummy.matrix);
   });
-  scene.add(mesh);
+  scene.add(cren);
+  return cren;
 }
 
 function addGate(THREE, scene, textures, material) {
